@@ -60,18 +60,28 @@ class _HomeState extends State<Home> {
         children: [
           const SizedBox(height: 30),
           Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            padding: const EdgeInsets.only(left: 10, right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Passwords',
-                    style: Theme.of(context).textTheme.displaySmall),
-                Text(
-                  'Always Secured',
-                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Passwords',
+                        style: Theme.of(context).textTheme.displaySmall),
+                    Text(
+                      'Always Secure',
+                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                    ),
+                  ],
                 ),
+                IconButton.filled(
+                  onPressed: () {},
+                  icon: const Icon(Symbols.search_rounded,
+                      weight: 600, opticalSize: 28),
+                )
               ],
             ),
           ),
@@ -80,9 +90,10 @@ class _HomeState extends State<Home> {
             Card(
               shadowColor: Colors.transparent,
               child: ListTile(
-                leading: const Icon(Icons.web_stories_rounded),
+                leading: const Icon(Symbols.lock_rounded),
                 title: Text(passwords[index]['website']),
-                subtitle: Text(passwords[index]['accounts'].length.toString()),
+                subtitle: Text(
+                    "${passwords[index]['accounts'].length.toString()} accounts"),
                 trailing: IconButton(
                   icon: const Icon(Icons.copy_rounded),
                   onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
@@ -93,16 +104,10 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
+          const SizedBox(height: 5),
         ],
       ),
       bottomNavigationBar: NavigationBar(
-        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-        onDestinationSelected: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        selectedIndex: selectedIndex,
         destinations: [
           NavigationDestination(
             icon: AnimatedSymbol(
@@ -128,6 +133,13 @@ class _HomeState extends State<Home> {
             label: 'Settings',
           ),
         ],
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+        labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
     );
   }
