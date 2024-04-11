@@ -90,12 +90,21 @@ class _HomeState extends State<Home> {
             Card(
               shadowColor: Colors.transparent,
               child: ListTile(
-                leading: const Icon(Symbols.lock_rounded),
+                leading: CircleAvatar(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  child: Icon(
+                    Symbols.lock_rounded,
+                    weight: 600,
+                    opticalSize: 28,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
                 title: Text(passwords[index]['website']),
                 subtitle: Text(
                     "${passwords[index]['accounts'].length.toString()} accounts"),
                 trailing: IconButton(
-                  icon: const Icon(Icons.copy_rounded),
+                  icon: const Icon(Symbols.arrow_right_rounded,
+                      weight: 600, opticalSize: 28),
                   onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text('Copied to clipboard'),
