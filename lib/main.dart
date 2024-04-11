@@ -1,7 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:random_password_generator/random_password_generator.dart';
+import 'package:flutter/services.dart';
+import 'package:password_manager/home/home.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    systemNavigationBarColor: Colors.transparent,
+  ));
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
   runApp(const MainApp());
 }
 
@@ -10,7 +19,9 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      title: 'Lock',
       debugShowCheckedModeBanner: false,
+      themeAnimationCurve: Curves.easeInOut,
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
         brightness: Brightness.light,
@@ -25,77 +36,6 @@ class MainApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.dark,
       home: const Home(),
-    );
-  }
-}
-
-class Home extends StatelessWidget {
-  const Home({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Icon(
-          Icons.lock,
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text('Hello World!'),
-            const SizedBox(height: 20),
-            FilledButton.icon(
-                onPressed: () {},
-                label: const Text('Click Me!'),
-                icon: const Icon(Icons.home_rounded)),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => showModal(context),
-        child: const Icon(Icons.add_rounded),
-      ),
-      bottomNavigationBar: NavigationBar(
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_rounded),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.search_rounded),
-            label: 'Search',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.favorite_rounded),
-            label: 'Favorite',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings_rounded),
-            label: 'Settings',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<dynamic> showModal(BuildContext context) {
-    final passwordGenerator = RandomPasswordGenerator();
-    return showModalBottomSheet(
-      barrierLabel: "Bottom Sheet",
-      showDragHandle: true,
-      context: context,
-      builder: (context) => Container(
-        height: 400,
-        child: Center(
-          child: Text(passwordGenerator.randomPassword(uppercase: true)),
-        ),
-      ),
     );
   }
 }
