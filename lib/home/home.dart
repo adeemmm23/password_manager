@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
           ),
           IconButton.filled(
               onPressed: () {
-                showModal(context);
+                showModal(context, setState);
               },
               icon: const Icon(
                 Symbols.add_rounded,
