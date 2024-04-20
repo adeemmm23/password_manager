@@ -25,13 +25,13 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
         brightness: Brightness.light,
-        seedColor: Colors.orange.shade700,
+        seedColor: Colors.orange.shade500,
       )),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.dark,
-          seedColor: Colors.orange.shade700,
+          seedColor: Colors.orange.shade500,
         ),
       ),
       themeMode: ThemeMode.dark,
