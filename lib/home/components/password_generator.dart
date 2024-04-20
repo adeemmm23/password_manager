@@ -2,83 +2,56 @@ import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:random_password_generator/random_password_generator.dart';
 
-Future<dynamic> showModal(BuildContext context, StateSetter setState) {
+Future<dynamic> showModal(BuildContext context) {
   final passwordGenerator = RandomPasswordGenerator();
   String password = "";
   return showModalBottomSheet(
-    barrierLabel: "Bottom Sheet",
-    showDragHandle: true,
-    context: context,
-    builder: (context) => SizedBox(
-        height: 1000,
-        width: MediaQuery.of(context).size.width,
-        child: Column(
-          children: [
-            const SizedBox(height: 20),
-            Text("Add Password", style: Theme.of(context).textTheme.titleLarge),
-            const SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(20),
-                  hintText: "Enter Site Name",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
+      enableDrag: false,
+      useSafeArea: true,
+      isScrollControlled: true,
+      barrierLabel: "Bottom Sheet",
+      context: context,
+      builder: (context) => DraggableScrollableSheet(
+          initialChildSize: 0.5,
+          minChildSize: 0.3,
+          maxChildSize: 1,
+          expand: false,
+          builder: (context, scrollController) {
+            return ListView(
+              controller: scrollController,
+              children: [
+                Icon(Symbols.horizontal_rule_rounded,
+                    size: 45,
+                    weight: 600,
+                    color:
+                        Theme.of(context).colorScheme.onSurface.withAlpha(80)),
+                const ListTile(
+                  title: Text("Generate Password"),
+                  leading: Icon(Symbols.lock),
+                ),
+                TextField(
+                  onTap: () {},
+                  decoration: const InputDecoration(
+                    labelText: "Password Length",
+                    hintText: "Enter the length of the password",
                   ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, right: 20),
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(20),
-                  hintText: "Enter Username",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(100)),
-                  ),
+                const ListTile(
+                  title: Text("Copy Password"),
+                  leading: Icon(Symbols.copy_all),
                 ),
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: TextEditingController(text: password),
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.all(20),
-                        hintText: "Enter Password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(100)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  IconButton.filled(
-                    icon: const Icon(Symbols.refresh_rounded,
-                        weight: 600, opticalSize: 28),
-                    onPressed: () {
-                      setState(() {
-                        password = passwordGenerator.randomPassword(
-                            uppercase: true,
-                            numbers: true,
-                            specialChar: true,
-                            passwordLength: 16);
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            FilledButton(onPressed: () {}, child: const Text("Add Password"))
-          ],
-        )),
-  );
+                ListTile(
+                  title: const Text("Close"),
+                  leading: const Icon(Symbols.close),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text(password),
+                  leading: const Icon(Symbols.lock),
+                ),
+              ],
+            );
+          }));
 }
