@@ -1,6 +1,6 @@
 import 'dart:math';
 
-String randomPassword(
+String generatePassword(
     {bool uppercase = false,
     bool numbers = false,
     bool special = false,
