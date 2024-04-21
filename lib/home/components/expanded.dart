@@ -47,6 +47,7 @@ class _ExpandablePageViewState extends State<ExpandablePageView> {
       builder: (context, value, child) => SizedBox(height: value, child: child),
       child: PageView(
         pageSnapping: true,
+        physics: const NeverScrollableScrollPhysics(),
         controller: widget.pageController,
         children: _sizeReportingChildren
             .asMap() //
