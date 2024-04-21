@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:password_manager/components/animated_symbols.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'components/bottom_sheet.dart';
 
@@ -18,26 +18,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
 
-  List<dynamic> passwords = [];
-
-  Future<void> readJsonFile() async {
-    final String response =
-        await rootBundle.loadString('assets/data/passwords.json');
-    var map = jsonDecode(response);
-    debugPrint(map['users'].toString());
-    setState(() {
-      passwords = map['users'];
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    Future.wait(
-      [
-        readJsonFile(),
-      ],
-    );
+  Future readJsonFile() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString('passwords');
+    if (data != null) {
+      return jsonDecode(data);
+    }
+    return [];
   }
 
   @override
@@ -52,70 +39,90 @@ class _HomeState extends State<Home> {
           color: Theme.of(context).colorScheme.primary,
         ),
       ),
-      body: ListView(
-        padding: const EdgeInsets.only(
-          right: 10,
-          left: 10,
-        ),
-        children: [
-          const SizedBox(height: 30),
-          Padding(
-            padding: const EdgeInsets.only(left: 10, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Passwords',
-                        style: Theme.of(context).textTheme.displaySmall),
-                    Text(
-                      'Always Secure',
-                      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                            color: Theme.of(context).colorScheme.secondary,
+      body: StreamBuilder(
+          stream: Stream.fromFuture(readJsonFile()),
+          builder: (context, snapshot) {
+            debugPrint(snapshot.data.toString());
+            if (snapshot.hasError) {
+              return const Center(child: Text("An Error Occurred!"));
+            }
+            if (!snapshot.hasData || snapshot.data.isEmpty) {
+              return const Center(child: Text("No Passwords Are Saved!"));
+            } else {
+              List passwords = snapshot.data as List;
+              return ListView(
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  left: 10,
+                ),
+                children: [
+                  const SizedBox(height: 30),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Passwords',
+                                style:
+                                    Theme.of(context).textTheme.displaySmall),
+                            Text(
+                              'Always Secure',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyLarge!
+                                  .copyWith(
+                                    color:
+                                        Theme.of(context).colorScheme.secondary,
+                                  ),
+                            ),
+                          ],
+                        ),
+                        IconButton.filled(
+                          onPressed: () {},
+                          icon: const Icon(Symbols.search_rounded,
+                              weight: 600, opticalSize: 28),
+                        )
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  for (int index = 0; index < passwords.length; index++)
+                    Card(
+                      shadowColor: Colors.transparent,
+                      child: ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor:
+                              Theme.of(context).colorScheme.primary,
+                          child: Icon(
+                            Symbols.lock_rounded,
+                            weight: 600,
+                            opticalSize: 28,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
+                        ),
+                        title: Text(passwords[index]['website']),
+                        subtitle: Text(
+                            "${passwords[index]['accounts'].length.toString()} accounts"),
+                        trailing: IconButton(
+                          icon: const Icon(Symbols.arrow_right_rounded,
+                              weight: 600, opticalSize: 28),
+                          onPressed: () =>
+                              ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Copied to clipboard'),
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-                IconButton.filled(
-                  onPressed: () {},
-                  icon: const Icon(Symbols.search_rounded,
-                      weight: 600, opticalSize: 28),
-                )
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          for (int index = 0; index < passwords.length; index++)
-            Card(
-              shadowColor: Colors.transparent,
-              child: ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  child: Icon(
-                    Symbols.lock_rounded,
-                    weight: 600,
-                    opticalSize: 28,
-                    color: Theme.of(context).colorScheme.onPrimary,
-                  ),
-                ),
-                title: Text(passwords[index]['website']),
-                subtitle: Text(
-                    "${passwords[index]['accounts'].length.toString()} accounts"),
-                trailing: IconButton(
-                  icon: const Icon(Symbols.arrow_right_rounded,
-                      weight: 600, opticalSize: 28),
-                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Copied to clipboard'),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          const SizedBox(height: 4),
-        ],
-      ),
+                  const SizedBox(height: 4),
+                ],
+              );
+            }
+          }),
       bottomNavigationBar: NavigationBar(
         destinations: [
           NavigationDestination(
@@ -126,8 +133,9 @@ class _HomeState extends State<Home> {
             label: 'Passwords',
           ),
           IconButton.filled(
-              onPressed: () {
-                showModal(context);
+              onPressed: () async {
+                await showModal(context);
+                setState(() {});
               },
               icon: const Icon(
                 Symbols.add_rounded,

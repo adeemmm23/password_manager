@@ -1,15 +1,54 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '/home/components/expanded.dart';
-
 import '../../utils/random_password_generator.dart';
 
 Future<dynamic> showModal(BuildContext context) {
   final pageController = PageController();
   double passwordLenght = 12;
   Set<String> selected = {};
-  final passwordController = TextEditingController();
+
   final dropDownController = TextEditingController();
+  final passwordController = TextEditingController();
+  final usernameController = TextEditingController();
+
+  void emptySharedPrefs() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('passwords');
+  }
+
+  void addPassword(
+      {required website,
+      required String username,
+      required String password}) async {
+    // Get the saved passwords
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? data = prefs.getString('passwords');
+
+    // Check if the passwords are empty
+    List passwords = [];
+    if (data != null) {
+      passwords = jsonDecode(data);
+    }
+
+    // Add the new password
+    for (var item in passwords) {
+      if (item['website'] == website) {
+        item['accounts'].add({'username': username, 'password': password});
+      } else {
+        passwords.add({
+          'website': website,
+          'accounts': [
+            {'username': username, 'password': password}
+          ]
+        });
+      }
+    }
+    prefs.setString('passwords', jsonEncode(passwords));
+  }
 
   return showModalBottomSheet(
       isScrollControlled: true,
@@ -67,9 +106,21 @@ Future<dynamic> showModal(BuildContext context) {
                             ),
                             dropdownMenuEntries: const [
                               DropdownMenuEntry(
-                                value: "Generate Password",
-                                label: "Generate Password",
-                              )
+                                value: "facebook",
+                                label: "Facebook",
+                              ),
+                              DropdownMenuEntry(
+                                value: "twitter",
+                                label: "Twitter",
+                              ),
+                              DropdownMenuEntry(
+                                value: "instagram",
+                                label: "Instagram",
+                              ),
+                              DropdownMenuEntry(
+                                value: "linkedin",
+                                label: "LinkedIn",
+                              ),
                             ],
                             onSelected: (value) {
                               modalSetState(() {
@@ -98,6 +149,7 @@ Future<dynamic> showModal(BuildContext context) {
                               )),
                       const SizedBox(height: 15),
                       TextField(
+                        controller: usernameController,
                         decoration: InputDecoration(
                           label: const Text("Username"),
                           hintText: "Tap here your email or username",
@@ -176,7 +228,15 @@ Future<dynamic> showModal(BuildContext context) {
                           }),
                       const SizedBox(height: 15),
                       FilledButton(
-                          onPressed: () {}, child: const Text("Save Password")),
+                          onPressed: () {
+                            addPassword(
+                                website: dropDownController.text,
+                                username: usernameController.text,
+                                password: passwordController.text);
+
+                            Navigator.pop(context);
+                          },
+                          child: const Text("Save Password")),
                       const SizedBox(height: 50),
                     ],
                   ),
