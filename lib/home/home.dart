@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:password_manager/components/animated_symbols.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'components/password_generator.dart';
+import 'components/bottom_sheet.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -113,6 +113,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
+          const SizedBox(height: 4),
         ],
       ),
       bottomNavigationBar: NavigationBar(

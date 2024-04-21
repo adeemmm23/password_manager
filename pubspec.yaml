@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  random_password_generator: ^0.2.1
   material_symbols_icons: ^4.2719.3
 
 dev_dependencies:
