@@ -35,7 +35,7 @@ class MainApp extends StatelessWidget {
           seedColor: Colors.green.shade500,
         ),
       ),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       home: const Home(),
     );
   }

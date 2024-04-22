@@ -1,10 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:password_manager/components/animated_symbols.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:password_manager/utils/passwords_storage.dart';
 
-import 'components/bottom_sheet.dart';
+import 'components/password_bottom_sheet.dart';
 
 class Home extends StatefulWidget {
   const Home({
@@ -17,16 +16,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int selectedIndex = 0;
-
-  Future readJsonFile() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? data = prefs.getString('passwords');
-    debugPrint("Data $data");
-    if (data != null) {
-      return jsonDecode(data);
-    }
-    return [];
-  }
+  final pageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +31,27 @@ class _HomeState extends State<Home> {
         ),
       ),
       body: PageView(
+        controller: pageViewController,
+        onPageChanged: (value) {
+          setState(() {
+            if (value == 1) {
+              selectedIndex = 2;
+            } else {
+              selectedIndex = value;
+            }
+          });
+          debugPrint('Page changed to $value');
+        },
         children: [
-          Center(
-            child: StreamBuilder(
+          Builder(builder: (context) {
+            return StreamBuilder(
                 initialData: const [],
-                stream: Stream.fromFuture(readJsonFile()),
+                stream: Stream.fromFuture(getAllPasswords()),
                 builder: (context, snapshot) {
-                  if (!mounted) {
-                    debugPrint('Not mounted');
-                  }
-                  debugPrint('snapshot is $snapshot.data.toString()');
                   if (snapshot.hasError) {
                     return const Center(child: Text("An Error Occurred!"));
                   }
-                  if (!snapshot.hasData || snapshot.data.isEmpty) {
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return const Center(child: Text("No Passwords Are Saved!"));
                   } else {
                     List passwords = snapshot.data as List;
@@ -133,11 +130,13 @@ class _HomeState extends State<Home> {
                       ],
                     );
                   }
-                }),
-          ),
-          const Center(
-            child: Text('Settings'),
-          ),
+                });
+          }),
+          Builder(builder: (context) {
+            return const Center(
+              child: Text('Settings'),
+            );
+          }),
         ],
       ),
       bottomNavigationBar: NavigationBar(
@@ -170,7 +169,11 @@ class _HomeState extends State<Home> {
         selectedIndex: selectedIndex,
         onDestinationSelected: (index) {
           setState(() {
-            selectedIndex = index;
+            pageViewController.animateToPage(
+              index,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            );
           });
         },
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,

@@ -1,10 +1,11 @@
 import 'dart:math';
 
-String generatePassword(
-    {bool uppercase = false,
-    bool numbers = false,
-    bool special = false,
-    double passwordLength = 8}) {
+String generatePassword({
+  bool uppercase = false,
+  bool numbers = false,
+  bool special = false,
+  double length = 8,
+}) {
   String lowerCasesList = "abcdefghijklmnopqrstuvwxyz";
   String upperCasesList = lowerCasesList.toUpperCase();
   String numbersList = "0123456789";
@@ -17,9 +18,42 @@ String generatePassword(
 
   int i = 0;
   String result = "";
-  for (i = 0; i < passwordLength.round(); i++) {
+  for (i = 0; i < length.round(); i++) {
     int randomInt = Random.secure().nextInt(allowedChars.length);
     result += allowedChars[randomInt];
+  }
+
+  if (uppercase) {
+    if (!result.contains(RegExp(r'[A-Z]'))) {
+      return generatePassword(
+        uppercase: uppercase,
+        numbers: numbers,
+        special: special,
+        length: length,
+      );
+    }
+  }
+
+  if (numbers) {
+    if (!result.contains(RegExp(r'[0-9]'))) {
+      return generatePassword(
+        uppercase: uppercase,
+        numbers: numbers,
+        special: special,
+        length: length,
+      );
+    }
+  }
+
+  if (special) {
+    if (!result.contains(RegExp(r'[@#=+!£\$%&?[\](){}]'))) {
+      return generatePassword(
+        uppercase: uppercase,
+        numbers: numbers,
+        special: special,
+        length: length,
+      );
+    }
   }
 
   return result;
