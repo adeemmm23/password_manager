@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:password_manager/pages/home.dart';
+import 'router.dart';
 
+bool pinLock = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
@@ -19,7 +20,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    late final appRouter = AppRouter();
+
+    return MaterialApp.router(
       title: 'Lock',
       debugShowCheckedModeBanner: false,
       themeAnimationCurve: Curves.easeInOut,
@@ -36,7 +39,9 @@ class MainApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const Home(),
+      routeInformationParser: appRouter.router.routeInformationParser,
+      routeInformationProvider: appRouter.router.routeInformationProvider,
+      routerDelegate: appRouter.router.routerDelegate,
     );
   }
 }
