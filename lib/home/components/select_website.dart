@@ -70,11 +70,13 @@ class _SelectWebsiteState extends State<SelectWebsite> {
                   ),
               ],
               onSelected: (value) {
-                widget.localSetState(() {
-                  widget.pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOutCubic);
-                });
+                if (widget.dropDownController.text.isNotEmpty) {
+                  widget.localSetState(() {
+                    widget.pageController.nextPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOutCubic);
+                  });
+                }
               },
             ),
             const SizedBox(height: 50),
