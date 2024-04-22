@@ -15,15 +15,16 @@ Future<dynamic> showModal(BuildContext context) {
   final passwordController = TextEditingController();
   final usernameController = TextEditingController();
 
-  void emptySharedPrefs() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('passwords');
-  }
+  // void emptySharedPrefs() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.remove('passwords');
+  // }
 
-  void addPassword(
-      {required website,
-      required String username,
-      required String password}) async {
+  void addPassword({
+    required String website,
+    required String username,
+    required String password,
+  }) async {
     // Get the saved passwords
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     String? data = prefs.getString('passwords');
@@ -34,19 +35,21 @@ Future<dynamic> showModal(BuildContext context) {
       passwords = jsonDecode(data);
     }
 
-    // Add the new password
+    // Check if the website already exists
     for (var item in passwords) {
       if (item['website'] == website) {
         item['accounts'].add({'username': username, 'password': password});
-      } else {
-        passwords.add({
-          'website': website,
-          'accounts': [
-            {'username': username, 'password': password}
-          ]
-        });
+        prefs.setString('passwords', jsonEncode(passwords));
+        return;
       }
     }
+
+    passwords.add({
+      'website': website,
+      'accounts': [
+        {'username': username, 'password': password}
+      ]
+    });
     prefs.setString('passwords', jsonEncode(passwords));
   }
 
@@ -229,10 +232,13 @@ Future<dynamic> showModal(BuildContext context) {
                       const SizedBox(height: 15),
                       FilledButton(
                           onPressed: () {
+                            debugPrint(
+                                "Saving Password $dropDownController, $usernameController, $passwordController");
                             addPassword(
-                                website: dropDownController.text,
-                                username: usernameController.text,
-                                password: passwordController.text);
+                              website: dropDownController.text,
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            );
 
                             Navigator.pop(context);
                           },
