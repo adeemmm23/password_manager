@@ -18,14 +18,17 @@ class _PasswordsState extends State<Passwords> {
     super.initState();
   }
 
-  Stream checkPasswords() async* {
-    var previousPasswords = await getAllPasswords();
+  Stream fetchStream() async* {
+    yield await getAllPasswords();
+    var prev = (await getAllPasswords()).toString();
     while (true) {
       await Future.delayed(const Duration(seconds: 1));
-      var currentPasswords = await getAllPasswords();
-      if (currentPasswords != previousPasswords) {
-        yield currentPasswords;
-        previousPasswords = currentPasswords;
+      debugPrint('Checking for password changes');
+      var current = (await getAllPasswords()).toString();
+      if (current != prev) {
+        debugPrint('Passwords changed');
+        yield await getAllPasswords();
+        prev = current;
       }
     }
   }
@@ -34,10 +37,7 @@ class _PasswordsState extends State<Passwords> {
   Widget build(BuildContext context) {
     return StreamBuilder(
       initialData: const [],
-      stream: Stream.periodic(
-        const Duration(seconds: 1),
-        (_) => getAllPasswords(),
-      ).asyncMap((event) => event),
+      stream: fetchStream(),
       builder: (context, snapshot) {
         debugPrint('Passwords page rebuilt');
         if (snapshot.hasError) {

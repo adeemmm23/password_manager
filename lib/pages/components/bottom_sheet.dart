@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:password_manager/home/components/save_password.dart';
-import 'package:password_manager/home/components/select_website.dart';
+import 'package:password_manager/pages/components/save_password.dart';
+import 'package:password_manager/pages/components/select_website.dart';
 import '../../components/expandable_pageview.dart';
 
-Future<dynamic> showModal(BuildContext context) {
+Future<dynamic> showPasswordModal(BuildContext context) {
   final pageController = PageController();
 
   final dropDownController = TextEditingController();
