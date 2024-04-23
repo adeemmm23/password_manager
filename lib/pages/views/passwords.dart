@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:password_manager/utils/passwords_storage.dart';
 
@@ -100,14 +101,11 @@ class _PasswordsState extends State<Passwords> {
                   subtitle: Text(
                       "${passwords[index]['accounts'].length.toString()} accounts"),
                   trailing: IconButton(
-                    icon: const Icon(Symbols.arrow_right_rounded,
-                        weight: 600, opticalSize: 28),
-                    onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Copied to clipboard'),
-                      ),
-                    ),
-                  ),
+                      icon: const Icon(Symbols.arrow_right_rounded,
+                          weight: 600, opticalSize: 28),
+                      onPressed: () {
+                        context.push("/collection");
+                      }),
                 ),
               ),
             const SizedBox(height: 4),

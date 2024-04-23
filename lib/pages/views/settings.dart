@@ -17,11 +17,11 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    // auth.isDeviceSupported().then((value) {
-    //   setState(() {
-    //     isSupported = value;
-    //   });
-    // });
+    auth.isDeviceSupported().then((value) {
+      setState(() {
+        isSupported = value;
+      });
+    });
   }
 
   // FingerPrint method
@@ -68,115 +68,164 @@ class _SettingsState extends State<Settings> {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
+          child:
+              Text('Account', style: Theme.of(context).textTheme.titleMedium),
+        ),
+        Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            shadowColor: Colors.transparent,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(23),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: const Icon(Icons.arrow_forward),
+                  leading: const Icon(Icons.key_rounded),
+                  title: const Text('Change Master Key'),
+                  onTap: () {},
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 2,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                if (isSupported)
+                  ListTile(
+                    visualDensity: const VisualDensity(vertical: 2.5),
+                    trailing: Switch(
+                      value: pinLock,
+                      onChanged: (value) {
+                        getAvailableBiometrics(value);
+                      },
+                    ),
+                    leading: const Icon(Icons.fingerprint),
+                    title: const Text('Pin lock'),
+                  ),
+                Divider(
+                  height: 0,
+                  thickness: 2,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: const Icon(Icons.arrow_forward),
+                  leading: const Icon(Icons.upload_rounded),
+                  title: const Text('Import Data'),
+                  onTap: () {},
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 2,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: const Icon(Icons.arrow_forward),
+                  leading: const Icon(Icons.download_rounded),
+                  title: const Text('Export Data'),
+                  onTap: () {},
+                ),
+              ],
+            )),
+        Padding(
+          padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
           child: Text(
-            'Settings',
-            style: Theme.of(context).textTheme.titleLarge,
+            'Visuals',
+            style: Theme.of(context).textTheme.titleMedium,
           ),
         ),
         Card(
             elevation: 2,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: const Icon(Icons.arrow_forward),
-              leading: const Icon(Icons.key_rounded),
-              title: const Text('Change Master Key'),
-              onTap: () {},
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(23),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: const Icon(Icons.arrow_forward),
+                  leading: const Icon(Icons.color_lens_rounded),
+                  title: const Text('Change Theme'),
+                  onTap: () {},
+                ),
+                Divider(
+                  height: 0,
+                  thickness: 2,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: Switch(
+                    value: isDark == ThemeMode.dark,
+                    onChanged: (value) {
+                      changeTheme(value);
+                    },
+                  ),
+                  leading: const Icon(Icons.dark_mode_outlined),
+                  title: const Text('Dark Mode'),
+                ),
+              ],
             )),
+        Padding(
+          padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
+          child: Text(
+            'Support',
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+        ),
         Card(
             elevation: 2,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: const Icon(Icons.arrow_forward),
-              leading: const Icon(Icons.color_lens_rounded),
-              title: const Text('Change Theme'),
-              onTap: () {},
-            )),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: Switch(
-                value: isDark == ThemeMode.dark,
-                onChanged: (value) {
-                  changeTheme(value);
-                },
-              ),
-              leading: const Icon(Icons.dark_mode_outlined),
-              title: const Text('Dark Mode'),
-            )),
-        if (isSupported)
-          Card(
-              elevation: 2,
-              shadowColor: Colors.transparent,
-              child: ListTile(
-                trailing: Switch(
-                  value: pinLock,
-                  onChanged: (value) {
-                    getAvailableBiometrics(value);
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(23),
+            ),
+            child: Column(
+              children: [
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: const Icon(Icons.arrow_forward),
+                  leading: const Icon(Icons.privacy_tip_outlined),
+                  title: const Text('Privacy Policy'),
+                  onTap: () {
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content:
+                          Text('Your informations are safe! Don\'t worry :)'),
+                    ));
                   },
                 ),
-                leading: const Icon(Icons.fingerprint),
-                title: const Text('Pin lock'),
-              )),
-        const Divider(
-          height: 30,
-          indent: 20,
-          endIndent: 20,
+                Divider(
+                  height: 0,
+                  thickness: 2,
+                  color: Theme.of(context).colorScheme.background,
+                ),
+                ListTile(
+                  visualDensity: const VisualDensity(vertical: 2.5),
+                  trailing: const Icon(Icons.arrow_forward),
+                  leading: const Icon(Icons.support),
+                  title: const Text('Support'),
+                  onTap: () {
+                    context.push('/support');
+                  },
+                ),
+              ],
+            )),
+        const SizedBox(
+          height: 20,
         ),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: const Icon(Icons.arrow_forward),
-              leading: const Icon(Icons.privacy_tip_outlined),
-              title: const Text('Privacy Policy'),
-              onTap: () {
-                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                  content: Text('Your informations are safe! Don\'t worry :)'),
-                ));
-              },
-            )),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: const Icon(Icons.arrow_forward),
-              leading: const Icon(Icons.support),
-              title: const Text('Support'),
-              onTap: () {
-                context.push('/support');
-              },
-            )),
-        const Divider(
-          height: 30,
-          indent: 20,
-          endIndent: 20,
+        Text(
+          'Version 1.0.0',
+          style: Theme.of(context).textTheme.bodySmall,
+          textAlign: TextAlign.center,
         ),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: const Icon(Icons.arrow_forward),
-              leading: const Icon(Icons.upload_rounded),
-              title: const Text('Import Data'),
-              onTap: () {},
-            )),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            child: ListTile(
-              trailing: const Icon(Icons.arrow_forward),
-              leading: const Icon(Icons.download_rounded),
-              title: const Text('Export Data'),
-              onTap: () {},
-            )),
+        const SizedBox(
+          height: 20,
+        ),
       ],
     ));
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:password_manager/pages/views/collection.dart';
 import 'package:password_manager/pages/views/support.dart';
 
 import 'main.dart';
@@ -28,6 +29,12 @@ class AppRouter {
         path: '/support',
         pageBuilder: (context, state) => const MaterialPage(
           child: Support(),
+        ),
+      ),
+      GoRoute(
+        path: '/collection',
+        pageBuilder: (context, state) => const MaterialPage(
+          child: Collection(),
         ),
       ),
     ],
