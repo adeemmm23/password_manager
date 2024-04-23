@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:password_manager/pages/home.dart';
+
+import 'main.dart';
+
+import '/pages/home.dart';
+import 'pages/biometric.dart';
 
 class AppRouter {
   late final router = GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: '/',
+    initialLocation: initialLocation(),
     routes: [
       GoRoute(
         path: '/',
@@ -13,6 +17,21 @@ class AppRouter {
           child: Home(),
         ),
       ),
+      GoRoute(
+        path: '/biometric',
+        pageBuilder: (context, state) => const MaterialPage(
+          child: Biometric(),
+        ),
+      ),
     ],
   );
+}
+
+// initial location
+String initialLocation() {
+  if (pinLock) {
+    return '/biometric';
+  } else {
+    return '/';
+  }
 }

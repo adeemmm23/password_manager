@@ -27,6 +27,7 @@ class _SettingsState extends State<Settings> {
   // FingerPrint method
   final LocalAuthentication auth = LocalAuthentication();
   bool isSupported = false;
+
   Future<void> getAvailableBiometrics(value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final availableBiometrics = await auth.getAvailableBiometrics();
