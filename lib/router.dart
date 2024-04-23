@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:password_manager/pages/views/support.dart';
 
 import 'main.dart';
 
@@ -21,6 +22,12 @@ class AppRouter {
         path: '/biometric',
         pageBuilder: (context, state) => const MaterialPage(
           child: Biometric(),
+        ),
+      ),
+      GoRoute(
+        path: '/support',
+        pageBuilder: (context, state) => const MaterialPage(
+          child: Support(),
         ),
       ),
     ],

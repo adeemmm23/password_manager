@@ -17,11 +17,11 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    auth.isDeviceSupported().then((value) {
-      setState(() {
-        isSupported = value;
-      });
-    });
+    // auth.isDeviceSupported().then((value) {
+    //   setState(() {
+    //     isSupported = value;
+    //   });
+    // });
   }
 
   // FingerPrint method
@@ -53,6 +53,12 @@ class _SettingsState extends State<Settings> {
     debugPrint('Available biometrics: $availableBiometrics');
   }
 
+  Future<void> changeTheme(value) async {
+    setState(() {
+      themeManager.toggleThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,17 +66,46 @@ class _SettingsState extends State<Settings> {
       padding: const EdgeInsets.all(8),
       physics: const ClampingScrollPhysics(),
       children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
+          child: Text(
+            'Settings',
+            style: Theme.of(context).textTheme.titleLarge,
+          ),
+        ),
         Card(
             elevation: 2,
             clipBehavior: Clip.antiAliasWithSaveLayer,
             shadowColor: Colors.transparent,
             child: ListTile(
               trailing: const Icon(Icons.arrow_forward),
+              leading: const Icon(Icons.key_rounded),
+              title: const Text('Change Master Key'),
+              onTap: () {},
+            )),
+        Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            shadowColor: Colors.transparent,
+            child: ListTile(
+              trailing: const Icon(Icons.arrow_forward),
+              leading: const Icon(Icons.color_lens_rounded),
+              title: const Text('Change Theme'),
+              onTap: () {},
+            )),
+        Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            shadowColor: Colors.transparent,
+            child: ListTile(
+              trailing: Switch(
+                value: isDark == ThemeMode.dark,
+                onChanged: (value) {
+                  changeTheme(value);
+                },
+              ),
               leading: const Icon(Icons.dark_mode_outlined),
-              title: const Text('System theme'),
-              onTap: () {
-                context.push('/settings/dark_mode');
-              },
+              title: const Text('Dark Mode'),
             )),
         if (isSupported)
           Card(
@@ -114,8 +149,33 @@ class _SettingsState extends State<Settings> {
               leading: const Icon(Icons.support),
               title: const Text('Support'),
               onTap: () {
-                context.push('/settings/support');
+                context.push('/support');
               },
+            )),
+        const Divider(
+          height: 30,
+          indent: 20,
+          endIndent: 20,
+        ),
+        Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            shadowColor: Colors.transparent,
+            child: ListTile(
+              trailing: const Icon(Icons.arrow_forward),
+              leading: const Icon(Icons.upload_rounded),
+              title: const Text('Import Data'),
+              onTap: () {},
+            )),
+        Card(
+            elevation: 2,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            shadowColor: Colors.transparent,
+            child: ListTile(
+              trailing: const Icon(Icons.arrow_forward),
+              leading: const Icon(Icons.download_rounded),
+              title: const Text('Export Data'),
+              onTap: () {},
             )),
       ],
     ));

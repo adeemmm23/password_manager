@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Support extends StatefulWidget {
@@ -13,15 +12,15 @@ class _SupportState extends State<Support> {
   String? selectedHelp;
   List<String> historyList = [];
   List<String> helpList = [
-    'Your mirror is not connecting',
-    'The app isn\'t connecting to the mirror',
-    'The mirror is not responding',
-    'The mirror refreshes too often',
-    'The mirror is not showing the correct time',
-    'The mirror is not showing the correct weather',
-    'The dark mode is not working',
-    'Hello world',
-    'Howdy'
+    'How to create a new password',
+    'How to generate a strong password',
+    'How to save a password securely',
+    'How to update an existing password',
+    'How to delete a saved password',
+    'How to search for a saved password',
+    'How to organize passwords into categories',
+    'How to enable two-factor authentication',
+    'How to recover a forgotten password'
   ];
 
   @override
@@ -44,6 +43,18 @@ class _SupportState extends State<Support> {
                   )),
             ),
             ListTile(
+                leading: CircleAvatar(
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                  child: Icon(
+                    Icons.chat_bubble_outline_rounded,
+                    size: 22,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+                title: const Text('You forgot your master password'),
+                onTap: () {}),
+            ListTile(
               leading: CircleAvatar(
                 backgroundColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -53,11 +64,8 @@ class _SupportState extends State<Support> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-              title: const Text('Your mirror is not connecting'),
-              onTap: () {
-                context.push(
-                    '/settings/support/article?articleName=Your mirror is not connecting&articleContent=1. Make sure your mirror is connected to the same network as your phone \n2. Restart your mirror \n3. Tap Scan Mirror on your app and scan the QR code on your phone');
-              },
+              title: const Text('How to enable biometric authentication'),
+              onTap: () {},
             ),
             ListTile(
               leading: CircleAvatar(
@@ -69,27 +77,8 @@ class _SupportState extends State<Support> {
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-              title: const Text('The app isn\'t connecting to the mirror'),
-              onTap: () {
-                context.push(
-                    '/settings/support/article?articleName=The app isn\'t connecting to the mirror&articleContent=No article content yet');
-              },
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                child: Icon(
-                  Icons.chat_bubble_outline_rounded,
-                  size: 22,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              title: const Text('The mirror is not responding'),
-              onTap: () {
-                context.push(
-                    '/settings/support/article?articleName=The mirror is not responding&articleContent=No article content yet');
-              },
+              title: const Text('How to change the app theme'),
+              onTap: () {},
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -193,8 +182,7 @@ class _SupportState extends State<Support> {
           controller.closeView(e);
           controller.text = e;
           handleSelection(e);
-          context.push(
-              '/settings/support/article?articleName=$e&articleContent=No article content yet');
+
           controller.clear();
         },
       );
@@ -213,8 +201,7 @@ class _SupportState extends State<Support> {
           controller.closeView(e);
           controller.text = e;
           handleSelection(e);
-          context.push(
-              '/settings/support/article?articleName=$e&articleContent=No article content yet');
+
           controller.clear();
         },
       );
