@@ -33,16 +33,6 @@ class _HomeState extends State<Home> {
       ),
       body: PageView(
         controller: pageViewController,
-        onPageChanged: (value) {
-          setState(() {
-            if (value == 1) {
-              selectedIndex = 2;
-            } else {
-              selectedIndex = value;
-            }
-          });
-          debugPrint('Page changed to $value');
-        },
         children: const [
           Passwords(),
           Settings(),
@@ -75,17 +65,29 @@ class _HomeState extends State<Home> {
           ),
         ],
         selectedIndex: selectedIndex,
-        onDestinationSelected: (index) {
-          setState(() {
-            pageViewController.animateToPage(
-              index,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-            );
-          });
-        },
+        onDestinationSelected: navigate,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
     );
+  }
+
+  void navigate(index) {
+    setState(() {
+      if (index == 2) {
+        selectedIndex = 2;
+        pageViewController.animateToPage(
+          1,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOutCubic,
+        );
+      } else {
+        selectedIndex = index;
+        pageViewController.animateToPage(
+          index,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
   }
 }
