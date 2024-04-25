@@ -55,6 +55,11 @@ class _SelectWebsiteState extends State<SelectWebsite> {
               width: MediaQuery.of(context).size.width * 0.9,
               label: const Text("Select Here"),
               requestFocusOnTap: true,
+              menuStyle: MenuStyle(
+                shape: MaterialStateProperty.resolveWith((states) =>
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20))),
+              ),
               inputDecorationTheme: InputDecorationTheme(
                 filled: true,
                 fillColor: Theme.of(context).colorScheme.surface.withAlpha(90),
@@ -70,8 +75,9 @@ class _SelectWebsiteState extends State<SelectWebsite> {
                   ),
               ],
               onSelected: (value) {
-                if (widget.dropDownController.text.isNotEmpty) {
+                if (widget.dropDownController.text.trim().isNotEmpty) {
                   widget.localSetState(() {
+                    FocusScope.of(context).unfocus();
                     widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOutCubic);

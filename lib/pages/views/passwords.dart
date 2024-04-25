@@ -24,7 +24,7 @@ class _PasswordsState extends State<Passwords> {
     var prev = (await getAllPasswords()).toString();
     while (true) {
       await Future.delayed(const Duration(seconds: 1));
-      debugPrint('Checking for password changes');
+      // debugPrint('Checking for password changes');
       var current = (await getAllPasswords()).toString();
       if (current != prev) {
         debugPrint('Passwords changed');
