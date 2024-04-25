@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
@@ -63,170 +64,194 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       physics: const ClampingScrollPhysics(),
       children: [
+        const SizedBox(height: 30),
         Padding(
-          padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
+          padding: const EdgeInsets.only(left: 10, right: 10),
           child:
-              Text('Account', style: Theme.of(context).textTheme.titleMedium),
+              Text('Settings', style: Theme.of(context).textTheme.displaySmall),
         ),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(23),
+        const SettingsTitle('Account'),
+        SettingsCard(
+          children: [
+            SettingsListTile(
+              trailing: const Icon(
+                Symbols.arrow_forward,
+                weight: 700,
+              ),
+              leading: const Icon(Symbols.key_rounded, weight: 700),
+              title: 'Change Master Key',
+              onTap: () {},
             ),
-            child: Column(
-              children: [
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: const Icon(Icons.arrow_forward),
-                  leading: const Icon(Icons.key_rounded),
-                  title: const Text('Change Master Key'),
-                  onTap: () {},
-                ),
-                Divider(
-                  height: 0,
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                if (isSupported)
-                  ListTile(
-                    visualDensity: const VisualDensity(vertical: 2.5),
-                    trailing: Switch(
-                      value: pinLock,
-                      onChanged: (value) {
-                        getAvailableBiometrics(value);
-                      },
-                    ),
-                    leading: const Icon(Icons.fingerprint),
-                    title: const Text('Pin lock'),
-                  ),
-                Divider(
-                  height: 0,
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: const Icon(Icons.arrow_forward),
-                  leading: const Icon(Icons.upload_rounded),
-                  title: const Text('Import Data'),
-                  onTap: () {},
-                ),
-                Divider(
-                  height: 0,
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: const Icon(Icons.arrow_forward),
-                  leading: const Icon(Icons.download_rounded),
-                  title: const Text('Export Data'),
-                  onTap: () {},
-                ),
-              ],
-            )),
-        Padding(
-          padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
-          child: Text(
-            'Visuals',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(23),
-            ),
-            child: Column(
-              children: [
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: const Icon(Icons.arrow_forward),
-                  leading: const Icon(Icons.color_lens_rounded),
-                  title: const Text('Change Theme'),
-                  onTap: () {},
-                ),
-                Divider(
-                  height: 0,
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: Switch(
-                    value: isDark == ThemeMode.dark,
-                    onChanged: (value) {
-                      changeTheme(value);
-                    },
-                  ),
-                  leading: const Icon(Icons.dark_mode_outlined),
-                  title: const Text('Dark Mode'),
-                ),
-              ],
-            )),
-        Padding(
-          padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
-          child: Text(
-            'Support',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-        ),
-        Card(
-            elevation: 2,
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            shadowColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(23),
-            ),
-            child: Column(
-              children: [
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: const Icon(Icons.arrow_forward),
-                  leading: const Icon(Icons.privacy_tip_outlined),
-                  title: const Text('Privacy Policy'),
-                  onTap: () {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content:
-                          Text('Your informations are safe! Don\'t worry :)'),
-                    ));
+            const SettingsDivider(),
+            if (isSupported)
+              SettingsListTile(
+                trailing: Switch(
+                  value: pinLock,
+                  onChanged: (value) {
+                    getAvailableBiometrics(value);
                   },
                 ),
-                Divider(
-                  height: 0,
-                  thickness: 2,
-                  color: Theme.of(context).colorScheme.background,
-                ),
-                ListTile(
-                  visualDensity: const VisualDensity(vertical: 2.5),
-                  trailing: const Icon(Icons.arrow_forward),
-                  leading: const Icon(Icons.support),
-                  title: const Text('Support'),
-                  onTap: () {
-                    context.push('/support');
-                  },
-                ),
-              ],
-            )),
-        const SizedBox(
-          height: 20,
+                leading: const Icon(Symbols.fingerprint, weight: 700),
+                title: 'Pin lock',
+              ),
+            const SettingsDivider(),
+            SettingsListTile(
+              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              leading: const Icon(Symbols.upload_rounded, weight: 700),
+              title: 'Import Data',
+              onTap: () {},
+            ),
+            const SettingsDivider(),
+            SettingsListTile(
+              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              leading: const Icon(Symbols.download_rounded, weight: 700),
+              title: 'Export Data',
+              onTap: () {},
+            ),
+          ],
         ),
-        Text(
-          'Version 1.0.0',
-          style: Theme.of(context).textTheme.bodySmall,
-          textAlign: TextAlign.center,
+        const SettingsTitle('Visuals'),
+        SettingsCard(
+          children: [
+            SettingsListTile(
+              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              leading: const Icon(Symbols.color_lens_rounded, weight: 700),
+              title: 'Change Theme',
+              onTap: () {},
+            ),
+            const SettingsDivider(),
+            SettingsListTile(
+              trailing: Switch(
+                value: isDark == ThemeMode.dark,
+                onChanged: (value) {
+                  changeTheme(value);
+                },
+              ),
+              leading: const Icon(Symbols.dark_mode_rounded, weight: 700),
+              title: 'Dark Mode',
+            ),
+          ],
         ),
-        const SizedBox(
-          height: 20,
+        const SettingsTitle('Support'),
+        SettingsCard(
+          children: [
+            SettingsListTile(
+              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              leading: const Icon(Symbols.privacy_tip_rounded, weight: 700),
+              title: 'Privacy Policy',
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                  content: Text('Your informations are safe! Don\'t worry :)'),
+                ));
+              },
+            ),
+            const SettingsDivider(),
+            SettingsListTile(
+              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              leading: const Icon(Symbols.support, weight: 700),
+              title: 'Support',
+              onTap: () {
+                context.push('/support');
+              },
+            ),
+          ],
         ),
+        const SettingsVerion(),
       ],
     ));
+  }
+}
+
+class SettingsCard extends StatelessWidget {
+  final List<Widget> children;
+
+  const SettingsCard({super.key, required this.children});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shadowColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(23),
+      ),
+      child: Column(children: children),
+    );
+  }
+}
+
+class SettingsListTile extends StatelessWidget {
+  final Widget trailing;
+  final Widget leading;
+  final String title;
+  final VoidCallback? onTap;
+
+  const SettingsListTile({
+    super.key,
+    required this.trailing,
+    required this.leading,
+    required this.title,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      visualDensity: const VisualDensity(vertical: 2.5),
+      trailing: trailing,
+      leading: leading,
+      title: Text(title),
+      onTap: onTap,
+    );
+  }
+}
+
+class SettingsDivider extends StatelessWidget {
+  const SettingsDivider({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 0,
+      thickness: 2,
+      color: Theme.of(context).colorScheme.background,
+    );
+  }
+}
+
+class SettingsTitle extends StatelessWidget {
+  const SettingsTitle(this.title, {super.key});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
+    );
+  }
+}
+
+class SettingsVerion extends StatelessWidget {
+  const SettingsVerion({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      child: Text(
+        'Version 1.0.0',
+        textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
   }
 }
