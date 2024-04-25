@@ -55,12 +55,17 @@ class _MainAppState extends State<MainApp> {
             debugShowCheckedModeBanner: false,
             themeAnimationCurve: Curves.easeInOut,
             theme: ThemeData(
+                pageTransitionsTheme: const PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                  },
+                ),
                 colorScheme: ColorScheme.fromSeed(
-              brightness: Brightness.light,
-              seedColor: Colors.green.shade500,
-            )),
+                  brightness: Brightness.light,
+                  seedColor: Colors.green.shade500,
+                )),
             darkTheme: ThemeData(
-              brightness: Brightness.dark,
               pageTransitionsTheme: const PageTransitionsTheme(
                 builders: {
                   TargetPlatform.android: CupertinoPageTransitionsBuilder(),
