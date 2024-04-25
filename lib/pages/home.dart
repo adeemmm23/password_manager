@@ -33,6 +33,15 @@ class _HomeState extends State<Home> {
       ),
       body: PageView(
         controller: pageViewController,
+        onPageChanged: (index) {
+          setState(() {
+            if (index == 1) {
+              selectedIndex = 2;
+            } else {
+              selectedIndex = index;
+            }
+          });
+        },
         children: const [
           Passwords(),
           Settings(),
@@ -47,11 +56,11 @@ class _HomeState extends State<Home> {
             ),
             label: 'Passwords',
           ),
-          IconButton.filled(
+          FilledButton(
               onPressed: () {
                 showPasswordModal(context);
               },
-              icon: const Icon(
+              child: const Icon(
                 Symbols.add_rounded,
                 weight: 600,
                 opticalSize: 28,
@@ -74,14 +83,12 @@ class _HomeState extends State<Home> {
   void navigate(index) {
     setState(() {
       if (index == 2) {
-        selectedIndex = 2;
         pageViewController.animateToPage(
           1,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOutCubic,
         );
       } else {
-        selectedIndex = index;
         pageViewController.animateToPage(
           index,
           duration: const Duration(milliseconds: 500),
