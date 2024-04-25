@@ -6,21 +6,29 @@ String generatePassword({
   bool special = false,
   double length = 8,
 }) {
-  String lowerCasesList = "abcdefghijklmnopqrstuvwxyz";
-  String upperCasesList = lowerCasesList.toUpperCase();
-  String numbersList = "0123456789";
-  String specialsList = "@#=+!£\$%&?[](){}";
+  const lowerCasesList = "abcdefghijklmnopqrstuvwxyz";
+  const upperCasesList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  const numbersList = "0123456789";
+  const specialsList = "@#=+!£\$%&?[](){}";
 
   String allowedChars = lowerCasesList;
   allowedChars += (uppercase ? upperCasesList : '');
   allowedChars += (numbers ? numbersList : '');
   allowedChars += (special ? specialsList : '');
 
-  int i = 0;
   String result = "";
-  for (i = 0; i < length.round(); i++) {
+  for (int i = 0; i < length.round(); i++) {
     int randomInt = Random.secure().nextInt(allowedChars.length);
     result += allowedChars[randomInt];
+  }
+
+  if (!result.contains(RegExp(r'[a-z]'))) {
+    return generatePassword(
+      uppercase: uppercase,
+      numbers: numbers,
+      special: special,
+      length: length,
+    );
   }
 
   if (uppercase) {
