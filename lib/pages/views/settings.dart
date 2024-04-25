@@ -65,11 +65,9 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
         body: ListView(
       padding: const EdgeInsets.symmetric(horizontal: 8),
-      physics: const ClampingScrollPhysics(),
       children: [
-        const SizedBox(height: 30),
         Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
+          padding: const EdgeInsets.only(top: 30, left: 10),
           child:
               Text('Settings', style: Theme.of(context).textTheme.displaySmall),
         ),

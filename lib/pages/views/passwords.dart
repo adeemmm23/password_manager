@@ -56,25 +56,13 @@ class _PasswordsState extends State<Passwords> {
             left: 10,
           ),
           children: [
-            const SizedBox(height: 30),
             Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Passwords',
-                          style: Theme.of(context).textTheme.displaySmall),
-                      Text(
-                        'Always Secure',
-                        style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                      ),
-                    ],
-                  ),
+                  Text('Passwords',
+                      style: Theme.of(context).textTheme.displaySmall),
                   IconButton.filled(
                     onPressed: () {},
                     icon: const Icon(Symbols.search_rounded,
