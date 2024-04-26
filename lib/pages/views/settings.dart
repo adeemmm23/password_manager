@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:material_symbols_icons/symbols.dart';
@@ -15,6 +14,36 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  bool isSupported = false;
+  final LocalAuthentication auth = LocalAuthentication();
+
+  Future<void> getAvailableBiometrics(value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Confim your identity to authenticate',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false,
+        ),
+      );
+      if (authenticated) {
+        setState(() {
+          prefs.setBool('pinLock', value);
+          pinLock = value;
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  Future<void> switchThemeMode(value) async {
+    setState(() {
+      themeManager.toggleThemeMode(value ? ThemeMode.dark : ThemeMode.light);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -22,41 +51,6 @@ class _SettingsState extends State<Settings> {
       setState(() {
         isSupported = value;
       });
-    });
-  }
-
-  // FingerPrint method
-  final LocalAuthentication auth = LocalAuthentication();
-  bool isSupported = false;
-
-  Future<void> getAvailableBiometrics(value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final availableBiometrics = await auth.getAvailableBiometrics();
-    try {
-      bool authenticated = await auth.authenticate(
-          localizedReason: 'Confim your identity to authenticate',
-          options: const AuthenticationOptions(
-            stickyAuth: true,
-            biometricOnly: false,
-          ));
-      debugPrint('Authenticated: $authenticated');
-      if (authenticated) {
-        if (mounted) {
-          setState(() {
-            prefs.setBool('pinLock', value);
-            pinLock = value;
-          });
-        }
-      }
-    } on PlatformException catch (e) {
-      debugPrint('Failed to authenticate: $e');
-    }
-    debugPrint('Available biometrics: $availableBiometrics');
-  }
-
-  Future<void> changeTheme(value) async {
-    setState(() {
-      themeManager.toggleThemeMode(value ? ThemeMode.dark : ThemeMode.light);
     });
   }
 
@@ -93,7 +87,7 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
                 leading: const Icon(Symbols.fingerprint, weight: 700),
-                title: 'Pin lock',
+                title: 'Pin Lock',
               ),
             const SettingsDivider(),
             SettingsListTile(
@@ -125,7 +119,7 @@ class _SettingsState extends State<Settings> {
               trailing: Switch(
                 value: isDark == ThemeMode.dark,
                 onChanged: (value) {
-                  changeTheme(value);
+                  switchThemeMode(value);
                 },
               ),
               leading: const Icon(Symbols.dark_mode_rounded, weight: 700),
@@ -230,10 +224,7 @@ class SettingsTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 8, top: 20, bottom: 10),
-      child: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
+      child: Text(title, style: Theme.of(context).textTheme.titleMedium),
     );
   }
 }
