@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class Biometric extends StatefulWidget {
   const Biometric({super.key});
@@ -41,7 +42,10 @@ class _BiometricState extends State<Biometric> {
               onPressed: () {
                 authenticate();
               },
-              icon: const Icon(Icons.lock_open_rounded))
+              icon: const Icon(
+                Symbols.lock_open_rounded,
+                weight: 700,
+              ))
         ],
       ),
     ));

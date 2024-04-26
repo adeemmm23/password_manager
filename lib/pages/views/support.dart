@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class Support extends StatefulWidget {
@@ -47,8 +48,9 @@ class _SupportState extends State<Support> {
                   backgroundColor:
                       Theme.of(context).colorScheme.primary.withOpacity(0.1),
                   child: Icon(
-                    Icons.chat_bubble_outline_rounded,
+                    Symbols.chat_bubble_outline_rounded,
                     size: 22,
+                    weight: 700,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
@@ -59,8 +61,9 @@ class _SupportState extends State<Support> {
                 backgroundColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 child: Icon(
-                  Icons.chat_bubble_outline_rounded,
+                  Symbols.chat_bubble_outline_rounded,
                   size: 22,
+                  weight: 700,
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
@@ -72,7 +75,8 @@ class _SupportState extends State<Support> {
                 backgroundColor:
                     Theme.of(context).colorScheme.primary.withOpacity(0.1),
                 child: Icon(
-                  Icons.chat_bubble_outline_rounded,
+                  Symbols.chat_bubble_outline_rounded,
+                  weight: 700,
                   size: 22,
                   color: Theme.of(context).colorScheme.primary,
                 ),
@@ -128,7 +132,8 @@ class _SupportState extends State<Support> {
                 shadowColor: Colors.transparent,
                 child: ListTile(
                   leading: Icon(
-                    Icons.support,
+                    Symbols.support,
+                    weight: 700,
                     size: 22,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -151,7 +156,8 @@ class _SupportState extends State<Support> {
                 shadowColor: Colors.transparent,
                 child: ListTile(
                   leading: Icon(
-                    Icons.feedback_rounded,
+                    Symbols.feedback_rounded,
+                    weight: 700,
                     size: 22,
                     color: Theme.of(context).colorScheme.primary,
                   ),
@@ -176,7 +182,10 @@ class _SupportState extends State<Support> {
   Iterable<Widget> getHistoryList(SearchController controller) {
     return historyList.map((e) {
       return ListTile(
-        leading: const Icon(Icons.history),
+        leading: const Icon(
+          Symbols.history,
+          weight: 700,
+        ),
         title: Text(e),
         onTap: () {
           controller.closeView(e);
@@ -195,7 +204,10 @@ class _SupportState extends State<Support> {
       return element.toLowerCase().contains(input.toLowerCase());
     }).map((e) {
       return ListTile(
-        leading: const Icon(Icons.chat_bubble_outline_rounded),
+        leading: const Icon(
+          Symbols.chat_bubble_outline_rounded,
+          weight: 700,
+        ),
         title: Text(e),
         onTap: () {
           controller.closeView(e);
