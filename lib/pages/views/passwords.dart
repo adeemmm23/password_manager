@@ -20,15 +20,15 @@ class _PasswordsState extends State<Passwords> {
   }
 
   Stream fetchStream() async* {
-    yield await getAllPasswords();
-    var prev = (await getAllPasswords()).toString();
+    yield await getPasswords();
+    var prev = (await getPasswords()).toString();
     while (true) {
       await Future.delayed(const Duration(seconds: 1));
       // debugPrint('Checking for password changes');
-      var current = (await getAllPasswords()).toString();
+      var current = (await getPasswords()).toString();
       if (current != prev) {
         debugPrint('Passwords changed');
-        yield await getAllPasswords();
+        yield await getPasswords();
         prev = current;
       }
     }

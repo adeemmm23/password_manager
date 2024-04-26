@@ -22,7 +22,7 @@ class _SelectWebsiteState extends State<SelectWebsite> {
 
   @override
   void initState() {
-    getAllPasswords().then((value) {
+    getPasswords().then((value) {
       setState(() {
         allPasswords = value;
       });
