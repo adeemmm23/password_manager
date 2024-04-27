@@ -1,17 +1,23 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:crypto/crypto.dart';
+
 import 'package:encrypt/encrypt.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart'
     show BuildContext, ScaffoldMessenger, SnackBar, Text;
+import 'package:flutter/services.dart';
+import '../main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
+final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
 
 Future<List> getPasswords() async {
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final key = Key.fromUtf8("password_manager");
-    final iv = IV.fromUtf8("password_manager");
+
     final encrypter = Encrypter(AES(key));
 
     String? data = prefs.getString('passwords');
@@ -29,8 +35,6 @@ Future<List> getPasswords() async {
 Future<void> storePasswords(List passwords) async {
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final key = Key.fromUtf8("password_manager");
-    final iv = IV.fromUtf8("password_manager");
     final encrypter = Encrypter(AES(key));
     final encrypted = encrypter.encrypt(jsonEncode(passwords), iv: iv);
     prefs.setString('passwords', encrypted.base64);
@@ -68,64 +72,119 @@ Future<void> addPassword({
 }
 
 Future<void> exportPasswords(BuildContext context) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
-  final String? passwords = prefs.getString('passwords');
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String? passwords = prefs.getString('passwords');
 
-  if (passwords == null) {
-    // No data to export
-    return;
-  }
+    if (passwords == null) {
+      // No data to export
+      return;
+    }
+    final String masterPassword =
+        utf8.encode(dotenv.env['ENCRYPTION_KEY']!).toString();
+    print("Master Password: $masterPassword");
+    print("lenght: ${masterPassword.length}");
 
-  Uint8List data = Uint8List.fromList(passwords.codeUnits);
+    final digest = sha256.convert(utf8.encode(masterPassword)).toString();
+    print("Digest: $digest");
+    print("lenght: ${digest.length}");
 
-  final String date = DateTime.now().toIso8601String();
-  final String? outputFile = await FilePicker.platform.saveFile(
-    dialogTitle: 'Please save it somewhere safe:',
-    fileName: 'passwords-$date.txt',
-    bytes: data,
-  );
+    final String export = digest + passwords;
 
-  if (outputFile == null) {
-    // User canceled the operation
-    return;
-  }
+    Uint8List data = Uint8List.fromList(export.codeUnits);
 
-  if (context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Passwords exported successfully!'),
-      ),
+    final String date = DateTime.now().toIso8601String();
+    final String? outputFile = await FilePicker.platform.saveFile(
+      dialogTitle: 'Please save it somewhere safe:',
+      fileName: 'passwords-$date.txt',
+      bytes: data,
     );
+
+    if (outputFile == null) {
+      // User canceled the operation
+      return;
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords exported successfully!'),
+        ),
+      );
+    }
+  } on Exception catch (e) {
+    Exception('Error: $e');
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('An error occurred while exporting the passwords!'),
+        ),
+      );
+    }
   }
 }
 
-Future<void> importPasswords(BuildContext context) async {
-  final FilePickerResult? result = await FilePicker.platform.pickFiles(
-    type: FileType.custom,
-    allowedExtensions: ['txt'],
-  );
-
-  if (result == null) {
-    // User canceled the operation
-    return;
-  }
-
-  final String? file = result.files.single.path;
-  if (file == null) {
-    // No file selected
-    return;
-  }
-
-  final String data = await File(file).readAsString();
-  final List passwords = jsonDecode(data);
-
-  await storePasswords(passwords);
-
-  if (context.mounted) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Passwords imported successfully!'),
-      ),
+Future<void> importPasswords(
+  BuildContext context,
+  String masterPassword,
+) async {
+  try {
+    final FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt'],
     );
+
+    if (result == null) {
+      // User canceled the operation
+      return;
+    }
+
+    final String? file = result.files.single.path;
+
+    if (file == null) {
+      // No file selected
+      return;
+    }
+
+    final String data = await File(file).readAsString();
+
+    final key = Key.fromUtf8(masterPassword);
+    final iv = IV.fromUtf8(masterPassword);
+
+    final encrypter = Encrypter(AES(key));
+    final String decrypted = encrypter.decrypt64(data, iv: iv);
+    final List passwords = jsonDecode(decrypted);
+
+    final List currentPasswords = await getPasswords();
+
+    for (final password in passwords) {
+      final existingWebsite = currentPasswords.indexWhere(
+        (item) => item['website'] == password['website'],
+      );
+
+      if (existingWebsite != -1) {
+        for (final account in password['accounts']) {
+          currentPasswords[existingWebsite]['accounts'].add(account);
+        }
+      } else {
+        currentPasswords.add(password);
+      }
+    }
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Passwords imported successfully!'),
+        ),
+      );
+    }
+  } on Exception catch (e) {
+    Exception('Error: $e');
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('An error occurred while importing the passwords!')),
+      );
+    }
   }
 }

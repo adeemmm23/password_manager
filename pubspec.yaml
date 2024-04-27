@@ -16,6 +16,8 @@ dependencies:
   url_launcher: ^6.2.6
   encrypt: ^5.0.3
   file_picker: ^8.0.3
+  flutter_dotenv: ^5.1.0
+  crypto: ^3.0.3
 
 dev_dependencies:
   flutter_test:
@@ -27,6 +29,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/logo/
+    - .env
   uses-material-design: true
 
 flutter_icons:

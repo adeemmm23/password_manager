@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import '../../utils/password_generator.dart';
-import '../../utils/passwords_storage.dart';
-import '../../utils/validators.dart';
+import '../../../../../utils/password_generator.dart';
+import '../../../../../utils/passwords_storage.dart';
+import '../../../../../utils/validators.dart';
 
 class SavePassword extends StatefulWidget {
   const SavePassword({

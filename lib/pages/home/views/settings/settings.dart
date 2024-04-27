@@ -4,8 +4,9 @@ import 'package:local_auth/local_auth.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../main.dart';
-import '../../utils/passwords_storage.dart';
+import '../../../../main.dart';
+import '../../../../utils/passwords_storage.dart';
+import '../passwords/utils/bottom_sheet.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -95,7 +96,9 @@ class _SettingsState extends State<Settings> {
               trailing: const Icon(Symbols.arrow_forward, weight: 700),
               leading: const Icon(Symbols.upload_rounded, weight: 700),
               title: 'Import Data',
-              onTap: () {},
+              onTap: () {
+                showMasterPasswordBottomSheet(context);
+              },
             ),
             const SettingsDivider(),
             SettingsListTile(

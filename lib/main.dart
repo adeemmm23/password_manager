@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'router.dart';
 
 bool pinLock = false;
 ThemeMode isDark = ThemeMode.system;
+final dotenv = DotEnv();
 
 class ThemeManager extends ChangeNotifier {
   Future<void> savePreferences() async {
@@ -28,6 +30,8 @@ void main() async {
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
+
+  await dotenv.load(fileName: ".env");
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

@@ -16,3 +16,13 @@ String? validatePassword(String? value) {
   }
   return null;
 }
+
+String? validateMasterPassword(String? value) {
+  if (value == null || value.isEmpty) {
+    return 'Please enter your master password';
+  }
+  if (value.length != 16) {
+    return 'Master password must be 16 characters long';
+  }
+  return null;
+}
