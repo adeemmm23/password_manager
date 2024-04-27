@@ -48,8 +48,7 @@ class _PasswordsState extends State<Passwords> {
           return const Center(child: Text("No Passwords Are Saved!"));
         }
 
-        // If no errors and data is available
-        List passwords = snapshot.data as List;
+        final passwords = snapshot.data as List;
         return ListView(
           padding: const EdgeInsets.only(
             right: 10,
@@ -57,7 +56,8 @@ class _PasswordsState extends State<Passwords> {
           ),
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 30, left: 10, right: 10),
+              padding: const EdgeInsets.only(
+                  top: 30, left: 10, right: 10, bottom: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -65,13 +65,15 @@ class _PasswordsState extends State<Passwords> {
                       style: Theme.of(context).textTheme.displaySmall),
                   IconButton.filled(
                     onPressed: () {},
-                    icon: const Icon(Symbols.search_rounded,
-                        weight: 600, opticalSize: 28),
-                  )
+                    icon: const Icon(
+                      Symbols.search_rounded,
+                      weight: 600,
+                      opticalSize: 28,
+                    ),
+                  ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
             for (var password in passwords) PasswordsCard(password: password),
             const SizedBox(height: 4),
           ],
@@ -102,11 +104,12 @@ class PasswordsCard extends StatelessWidget {
         title: Text(password['website']),
         subtitle: Text("${password['accounts'].length.toString()} accounts"),
         trailing: IconButton(
-            icon: const Icon(Symbols.arrow_right_rounded,
-                weight: 600, opticalSize: 28),
-            onPressed: () {
-              context.push("/collection");
-            }),
+          icon: const Icon(Symbols.arrow_right_rounded,
+              weight: 600, opticalSize: 28),
+          onPressed: () {
+            context.push("/collection");
+          },
+        ),
       ),
     );
   }
