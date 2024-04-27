@@ -24,6 +24,8 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
+
+    // Check if the device supports biometrics
     auth.isDeviceSupported().then((value) {
       setState(() {
         isSupported = value;

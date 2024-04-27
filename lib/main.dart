@@ -1,33 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'global/constants.dart';
 import 'global/theme.dart';
 import 'router.dart';
-
-final dotenv = DotEnv();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
   final isLocked = prefs.getBool('pinLock') ?? false;
   await dotenv.load(fileName: ".env");
+  final appRouter = AppRouter(isLocked: isLocked);
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
-  runApp(MainApp(isLocked: isLocked));
+  runApp(MainApp(appRouter: appRouter));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key, required this.isLocked});
+  const MainApp({super.key, required this.appRouter});
 
-  final bool isLocked;
+  final AppRouter appRouter;
   @override
   Widget build(BuildContext context) {
-    final appRouter = AppRouter(isLocked: isLocked);
+    debugPrint("Building MainApp");
 
     return BlocProvider(
       create: (context) => ThemeCubit(),

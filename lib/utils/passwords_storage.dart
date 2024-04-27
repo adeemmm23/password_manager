@@ -8,13 +8,12 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart'
     show BuildContext, ScaffoldMessenger, SnackBar, Text;
 import 'package:flutter/services.dart';
-import '../main.dart';
+import '../global/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
-final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
-
 Future<List> getPasswords() async {
+  final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
+  final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -33,6 +32,8 @@ Future<List> getPasswords() async {
 }
 
 Future<void> storePasswords(List passwords) async {
+  final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
+  final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
   try {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     final encrypter = Encrypter(AES(key));
