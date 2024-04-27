@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../main.dart';
+import '../../../../global/theme/theme_cubit.dart';
 import '../../../../utils/passwords_storage.dart';
 import '../passwords/utils/bottom_sheet.dart';
 
@@ -17,34 +18,8 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
   bool isSupported = false;
+  bool isLocked = false;
   final LocalAuthentication auth = LocalAuthentication();
-
-  Future<void> getAvailableBiometrics(value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    try {
-      bool authenticated = await auth.authenticate(
-        localizedReason: 'Confim your identity to authenticate',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: false,
-        ),
-      );
-      if (authenticated) {
-        setState(() {
-          prefs.setBool('pinLock', value);
-          pinLock = value;
-        });
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  Future<void> switchThemeMode(value) async {
-    setState(() {
-      themeManager.toggleThemeMode(value ? ThemeMode.dark : ThemeMode.light);
-    });
-  }
 
   @override
   void initState() {
@@ -83,7 +58,7 @@ class _SettingsState extends State<Settings> {
             if (isSupported)
               SettingsListTile(
                 trailing: Switch(
-                  value: pinLock,
+                  value: isLocked,
                   onChanged: (value) {
                     getAvailableBiometrics(value);
                   },
@@ -121,9 +96,10 @@ class _SettingsState extends State<Settings> {
             const SettingsDivider(),
             SettingsListTile(
               trailing: Switch(
-                value: isDark == ThemeMode.dark,
+                value: context.watch<ThemeCubit>().state == ThemeMode.dark,
                 onChanged: (value) {
-                  switchThemeMode(value);
+                  context.read<ThemeCubit>().toggleThemeMode(
+                      value ? ThemeState.dark : ThemeState.light);
                 },
               ),
               leading: const Icon(Symbols.dark_mode_rounded, weight: 700),
@@ -158,6 +134,28 @@ class _SettingsState extends State<Settings> {
         const SettingsVerion(),
       ],
     ));
+  }
+
+  Future<void> getAvailableBiometrics(value) async {
+    final prefs = await SharedPreferences.getInstance();
+    isLocked = prefs.getBool('pinLock') ?? false;
+    try {
+      bool authenticated = await auth.authenticate(
+        localizedReason: 'Confim your identity to authenticate',
+        options: const AuthenticationOptions(
+          stickyAuth: true,
+          biometricOnly: false,
+        ),
+      );
+      if (authenticated) {
+        setState(() {
+          prefs.setBool('pinLock', value);
+          isLocked = value;
+        });
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
   }
 }
 

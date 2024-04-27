@@ -1,75 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'global/theme/theme_cubit.dart';
 import 'router.dart';
 
-bool pinLock = false;
-ThemeMode isDark = ThemeMode.system;
 final dotenv = DotEnv();
-
-class ThemeManager extends ChangeNotifier {
-  Future<void> savePreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isDark', isDark == ThemeMode.dark);
-  }
-
-  toggleThemeMode(value) {
-    isDark = value;
-    notifyListeners();
-    savePreferences();
-  }
-}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  pinLock = prefs.getBool('pinLock') ?? false;
-  isDark = prefs.getBool('isDark') == true ? ThemeMode.dark : ThemeMode.system;
+  final prefs = await SharedPreferences.getInstance();
+  final lock = prefs.getBool('pinLock') ?? false;
+  await dotenv.load(fileName: ".env");
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
-
-  await dotenv.load(fileName: ".env");
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-  runApp(const MainApp());
+  runApp(MainApp(lock: lock));
 }
 
-final themeManager = ThemeManager();
-final appRouter = AppRouter();
+class MainApp extends StatelessWidget {
+  const MainApp({super.key, required this.lock});
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+  final bool lock;
 
-  @override
-  State<MainApp> createState() => _MainAppState();
-}
-
-class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: themeManager,
-        builder: (context, child) {
-          return MaterialApp.router(
-            title: 'Lock',
-            debugShowCheckedModeBanner: false,
-            themeAnimationCurve: Curves.easeInOut,
-            theme: ThemeData(
-                pageTransitionsTheme: const PageTransitionsTheme(
-                  builders: {
-                    TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                  },
-                ),
-                colorScheme: ColorScheme.fromSeed(
-                  brightness: Brightness.light,
-                  seedColor: Colors.green.shade500,
-                )),
-            darkTheme: ThemeData(
+    final appRouter = AppRouter(lock: lock);
+
+    return BlocProvider(
+      create: (context) => ThemeCubit(),
+      child: BlocBuilder<ThemeCubit, ThemeMode>(
+          builder: (context, ThemeMode themeMode) {
+        return MaterialApp.router(
+          title: 'Lock',
+          debugShowCheckedModeBanner: false,
+          themeAnimationCurve: Curves.easeInOut,
+          theme: ThemeData(
               pageTransitionsTheme: const PageTransitionsTheme(
                 builders: {
                   TargetPlatform.android: CupertinoPageTransitionsBuilder(),
@@ -77,15 +46,27 @@ class _MainAppState extends State<MainApp> {
                 },
               ),
               colorScheme: ColorScheme.fromSeed(
-                brightness: Brightness.dark,
+                brightness: Brightness.light,
                 seedColor: Colors.green.shade500,
-              ),
+              )),
+          darkTheme: ThemeData(
+            pageTransitionsTheme: const PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+              },
             ),
-            themeMode: isDark,
-            routeInformationParser: appRouter.router.routeInformationParser,
-            routeInformationProvider: appRouter.router.routeInformationProvider,
-            routerDelegate: appRouter.router.routerDelegate,
-          );
-        });
+            colorScheme: ColorScheme.fromSeed(
+              brightness: Brightness.dark,
+              seedColor: Colors.green.shade500,
+            ),
+          ),
+          themeMode: themeMode,
+          routeInformationParser: appRouter.router.routeInformationParser,
+          routeInformationProvider: appRouter.router.routeInformationProvider,
+          routerDelegate: appRouter.router.routerDelegate,
+        );
+      }),
+    );
   }
 }
