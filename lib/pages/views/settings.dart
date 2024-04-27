@@ -5,6 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../main.dart';
+import '../../utils/passwords_storage.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -101,7 +102,7 @@ class _SettingsState extends State<Settings> {
               trailing: const Icon(Symbols.arrow_forward, weight: 700),
               leading: const Icon(Symbols.download_rounded, weight: 700),
               title: 'Export Data',
-              onTap: () {},
+              onTap: () => exportPasswords(context),
             ),
           ],
         ),
