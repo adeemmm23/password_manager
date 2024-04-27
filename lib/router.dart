@@ -6,11 +6,11 @@ import 'pages/home/home.dart';
 import 'pages/biometric/biometric.dart';
 
 class AppRouter {
-  AppRouter({required this.lock});
-  final bool lock;
+  AppRouter({required this.isLocked});
+  final bool isLocked;
   late final router = GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: initialLocation(lock),
+    initialLocation: initialLocation(isLocked),
     routes: [
       GoRoute(
         path: '/',
@@ -44,8 +44,8 @@ class AppRouter {
   );
 
   // initial location
-  String initialLocation(bool lock) {
-    if (lock) {
+  String initialLocation(bool isLocked) {
+    if (isLocked) {
       return '/biometric';
     } else {
       return '/';

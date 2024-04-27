@@ -5,7 +5,7 @@ import 'package:local_auth/local_auth.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../global/theme/theme_cubit.dart';
+import '../../../../global/theme.dart';
 import '../../../../utils/passwords_storage.dart';
 import '../passwords/utils/bottom_sheet.dart';
 
