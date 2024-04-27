@@ -16,25 +16,29 @@ class AppRouter {
       GoRoute(
         path: '/',
         pageBuilder: (context, state) => const MaterialPage(
+          name: 'home',
           child: Home(),
         ),
       ),
       GoRoute(
         path: '/biometric',
         pageBuilder: (context, state) => const MaterialPage(
+          name: 'biometric',
           child: Biometric(),
         ),
       ),
       GoRoute(
         path: '/support',
         pageBuilder: (context, state) => const MaterialPage(
+          name: 'support',
           child: Support(),
         ),
       ),
       GoRoute(
         path: '/collection',
-        pageBuilder: (context, state) => const MaterialPage(
-          child: Collection(),
+        pageBuilder: (context, state) => MaterialPage(
+          name: 'collection',
+          child: Collection(password: state.extra as Map),
         ),
       ),
     ],
