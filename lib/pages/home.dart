@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:password_manager/components/animated_symbols.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:password_manager/pages/home/views/passwords/passwords.dart';
-import 'package:password_manager/pages/home/views/settings/settings.dart';
+import 'package:password_manager/pages/views/passwords.dart';
+import 'package:password_manager/pages/views/settings.dart';
 
-import 'views/passwords/utils/bottom_sheet.dart';
+import 'views/components/bottom_sheet.dart';
 
 class Home extends StatefulWidget {
   const Home({

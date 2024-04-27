@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:password_manager/pages/home/views/passwords/views/collection.dart';
-import 'package:password_manager/pages/home/views/settings/views/support.dart';
-import 'pages/home/home.dart';
-import 'pages/biometric/biometric.dart';
+import 'package:password_manager/pages/views/passwords_collection.dart';
+import 'package:password_manager/pages/views/settings_support.dart';
+import 'pages/home.dart';
+import 'pages/biometric.dart';
 
 class AppRouter {
   AppRouter({required this.isLocked});

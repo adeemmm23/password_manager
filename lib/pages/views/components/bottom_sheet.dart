@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:password_manager/pages/home/views/passwords/components/save_password.dart';
-import 'package:password_manager/pages/home/views/passwords/components/select_website.dart';
-import '../../../../../components/expandable_pageview.dart';
-import '../../../../../utils/passwords_storage.dart';
-import '../../../../../utils/validators.dart';
+import 'package:password_manager/pages/views/components/save_password.dart';
+import 'package:password_manager/pages/views/components/select_website.dart';
+import '../../../components/expandable_pageview.dart';
+import '../../../utils/passwords_storage.dart';
+import '../../../utils/validators.dart';
 
 Future<dynamic> showPasswordModal(BuildContext context) {
   final pageController = PageController();
