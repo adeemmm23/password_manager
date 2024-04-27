@@ -11,27 +11,21 @@ class Collection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: CollectionAppBar(website: password['website']),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(100),
+        child: CollectionAppBar(),
       ),
-      body: Padding(
+      body: ListView(
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 15, left: 10),
-              child: Text(
-                'Accounts',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-            ),
-            for (var account in password['accounts'])
-              CollectionsCards(account: account),
-          ],
-        ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20, bottom: 15, left: 10),
+            child: Text(password['website'],
+                style: Theme.of(context).textTheme.headlineLarge),
+          ),
+          for (var account in password['accounts'])
+            CollectionsCards(account: account),
+        ],
       ),
     );
   }
@@ -63,15 +57,15 @@ class _CollectionsCardsState extends State<CollectionsCards> {
         }),
         onLongPress: () async {
           await Clipboard.setData(
-                  ClipboardData(text: widget.account['password']))
-              .then(
-            (_) => ScaffoldMessenger.of(context).showSnackBar(
+              ClipboardData(text: widget.account['password']));
+          if (context.mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text('Password copied to clipboard'),
                 duration: Duration(seconds: 2),
               ),
-            ),
-          );
+            );
+          }
         },
         title: Text(widget.account['username']),
         subtitle: Text(isObscure
@@ -93,10 +87,7 @@ class _CollectionsCardsState extends State<CollectionsCards> {
 class CollectionAppBar extends StatelessWidget {
   const CollectionAppBar({
     super.key,
-    required this.website,
   });
-
-  final String website;
 
   @override
   Widget build(BuildContext context) {
@@ -129,7 +120,7 @@ class CollectionAppBar extends StatelessWidget {
                     children: [
                       const Icon(Icons.arrow_back_rounded, size: 26),
                       const SizedBox(width: 10),
-                      Text(website,
+                      Text("Accounts",
                           style: Theme.of(context).textTheme.titleLarge),
                     ],
                   ),

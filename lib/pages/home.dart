@@ -58,14 +58,7 @@ class _HomeState extends State<Home> {
           ),
           FilledButton(
               onPressed: () async {
-                await showPasswordModal(context).then(
-                  (value) => ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Password added successfully'),
-                      duration: Duration(seconds: 2),
-                    ),
-                  ),
-                );
+                await showPasswordModal(context);
               },
               child: const Icon(
                 Symbols.add_rounded,

@@ -29,6 +29,14 @@ class _PasswordsState extends State<Passwords> {
       if (current != prev) {
         debugPrint('Passwords changed');
         yield await getPasswords();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Password added successfully'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
         prev = current;
       }
     }
@@ -55,30 +63,39 @@ class _PasswordsState extends State<Passwords> {
             left: 10,
           ),
           children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                  top: 30, left: 10, right: 10, bottom: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Passwords',
-                      style: Theme.of(context).textTheme.displaySmall),
-                  IconButton.filled(
-                    onPressed: () {},
-                    icon: const Icon(
-                      Symbols.search_rounded,
-                      weight: 600,
-                      opticalSize: 28,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            const PasswordsTitle(),
             for (var password in passwords) PasswordsCard(password: password),
             const SizedBox(height: 4),
           ],
         );
       },
+    );
+  }
+}
+
+class PasswordsTitle extends StatelessWidget {
+  const PasswordsTitle({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 30, left: 10, right: 10, bottom: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Passwords', style: Theme.of(context).textTheme.displaySmall),
+          IconButton.filled(
+            onPressed: () {},
+            icon: const Icon(
+              Symbols.search_rounded,
+              weight: 600,
+              opticalSize: 28,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -91,6 +108,7 @@ class PasswordsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shadowColor: Colors.transparent,
+      clipBehavior: Clip.antiAlias,
       child: ListTile(
         leading: CircleAvatar(
           backgroundColor: Theme.of(context).colorScheme.primary,
@@ -103,13 +121,11 @@ class PasswordsCard extends StatelessWidget {
         ),
         title: Text(password['website']),
         subtitle: Text("${password['accounts'].length.toString()} accounts"),
-        trailing: IconButton(
-          icon: const Icon(Symbols.arrow_right_rounded,
-              weight: 600, opticalSize: 28),
-          onPressed: () {
-            context.push("/collection", extra: password);
-          },
-        ),
+        trailing: const Icon(Symbols.arrow_right_rounded,
+            weight: 600, opticalSize: 28),
+        onTap: () {
+          context.push("/collection", extra: password);
+        },
       ),
     );
   }
