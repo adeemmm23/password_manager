@@ -107,7 +107,7 @@ class PasswordsCard extends StatelessWidget {
           icon: const Icon(Symbols.arrow_right_rounded,
               weight: 600, opticalSize: 28),
           onPressed: () {
-            context.push("/collection");
+            context.push("/collection", extra: password);
           },
         ),
       ),
