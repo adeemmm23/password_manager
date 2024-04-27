@@ -72,34 +72,42 @@ class _PasswordsState extends State<Passwords> {
               ),
             ),
             const SizedBox(height: 20),
-            for (int index = 0; index < passwords.length; index++)
-              Card(
-                shadowColor: Colors.transparent,
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    child: Icon(
-                      Symbols.lock_rounded,
-                      weight: 600,
-                      opticalSize: 28,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                  ),
-                  title: Text(passwords[index]['website']),
-                  subtitle: Text(
-                      "${passwords[index]['accounts'].length.toString()} accounts"),
-                  trailing: IconButton(
-                      icon: const Icon(Symbols.arrow_right_rounded,
-                          weight: 600, opticalSize: 28),
-                      onPressed: () {
-                        context.push("/collection");
-                      }),
-                ),
-              ),
+            for (var password in passwords) PasswordsCard(password: password),
             const SizedBox(height: 4),
           ],
         );
       },
+    );
+  }
+}
+
+class PasswordsCard extends StatelessWidget {
+  const PasswordsCard({super.key, required this.password});
+
+  final Map password;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      shadowColor: Colors.transparent,
+      child: ListTile(
+        leading: CircleAvatar(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          child: Icon(
+            Symbols.lock_rounded,
+            weight: 600,
+            opticalSize: 28,
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
+        ),
+        title: Text(password['website']),
+        subtitle: Text("${password['accounts'].length.toString()} accounts"),
+        trailing: IconButton(
+            icon: const Icon(Symbols.arrow_right_rounded,
+                weight: 600, opticalSize: 28),
+            onPressed: () {
+              context.push("/collection");
+            }),
+      ),
     );
   }
 }
