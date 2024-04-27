@@ -17,11 +17,14 @@ void main() async {
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
-  runApp(MainApp(appRouter: appRouter));
+  runApp(MainApp(appRouter));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key, required this.appRouter});
+  const MainApp(
+    this.appRouter, {
+    super.key,
+  });
 
   final AppRouter appRouter;
   @override
