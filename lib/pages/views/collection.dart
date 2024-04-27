@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class Collection extends StatelessWidget {
   const Collection({super.key, required this.password});
@@ -27,18 +29,61 @@ class Collection extends StatelessWidget {
               ),
             ),
             for (var account in password['accounts'])
-              Card(
-                shadowColor: Colors.transparent,
-                child: ListTile(
-                  title: Text(account['username']),
-                  subtitle: Text(account['password']),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.remove_red_eye),
-                    onPressed: () {},
-                  ),
-                ),
-              ),
+              CollectionsCards(account: account),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CollectionsCards extends StatefulWidget {
+  const CollectionsCards({
+    super.key,
+    required this.account,
+  });
+
+  final Map account;
+
+  @override
+  State<CollectionsCards> createState() => _CollectionsCardsState();
+}
+
+class _CollectionsCardsState extends State<CollectionsCards> {
+  bool isObscure = true;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      shadowColor: Colors.transparent,
+      child: ListTile(
+        onTap: () => setState(() {
+          isObscure = !isObscure;
+        }),
+        onLongPress: () async {
+          await Clipboard.setData(
+                  ClipboardData(text: widget.account['password']))
+              .then(
+            (_) => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Password copied to clipboard'),
+                duration: Duration(seconds: 2),
+              ),
+            ),
+          );
+        },
+        title: Text(widget.account['username']),
+        subtitle: Text(isObscure
+            ? '•' * widget.account['password'].length
+            : widget.account['password']),
+        trailing: IconButton(
+          icon: const Icon(
+            Symbols.more_vert_rounded,
+            weight: 700,
+            opticalSize: 36,
+          ),
+          onPressed: () {},
         ),
       ),
     );
@@ -102,7 +147,11 @@ class CollectionAppBar extends StatelessWidget {
                 ),
               ),
               onPressed: () {},
-              icon: const Icon(Icons.more_vert_rounded),
+              icon: const Icon(
+                Symbols.more_vert_rounded,
+                weight: 700,
+                opticalSize: 36,
+              ),
             ),
           ],
         ),
