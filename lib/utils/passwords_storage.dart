@@ -12,6 +12,7 @@ import 'package:go_router/go_router.dart';
 import '../global/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// A utility function to get the stored passwords from the device.
 Future<List> getPasswords() async {
   final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
   final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
@@ -32,6 +33,7 @@ Future<List> getPasswords() async {
   }
 }
 
+/// A utility function to store the passwords on the device.
 Future<void> storePasswords(List passwords) async {
   final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
   final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
@@ -45,6 +47,7 @@ Future<void> storePasswords(List passwords) async {
   }
 }
 
+/// A utility function to add a password to the stored passwords.
 Future<void> addPassword({
   required String website,
   required String username,
@@ -73,12 +76,16 @@ Future<void> addPassword({
   }
 }
 
+/// A utility function to remove a password from the stored passwords.
 Future<void> exportPasswords(BuildContext context) async {
   try {
     final prefs = await SharedPreferences.getInstance();
     final passwords = prefs.getString('passwords');
 
-    if (passwords == null) return; // No passwords to export
+    if (passwords == null) {
+      // No passwords to export
+      return;
+    }
 
     final String masterKey = dotenv.env['ENCRYPTION_KEY']!;
     final String digest = sha256.convert(utf8.encode(masterKey)).toString();
@@ -100,17 +107,18 @@ Future<void> exportPasswords(BuildContext context) async {
     }
 
     if (context.mounted) {
-      sendScaffoldMessenge(context, 'Passwords exported successfully!', false);
+      sendScaffoldMessenger(context, 'Passwords exported successfully!', false);
     }
   } on Exception catch (e) {
     Exception('Error: $e');
     if (context.mounted) {
-      sendScaffoldMessenge(
+      sendScaffoldMessenger(
           context, 'An error occurred while exporting the passwords!', true);
     }
   }
 }
 
+/// A utility function to import passwords from a file.
 Future<void> importPasswords(
   BuildContext context,
   String masterKey,
@@ -136,7 +144,7 @@ Future<void> importPasswords(
     if (!checkPassword(masterKey, dataMasterKey)) {
       // Invalid master password
       if (context.mounted) {
-        sendScaffoldMessenge(context, 'Invalid master password!', true);
+        sendScaffoldMessenger(context, 'Invalid master password!', true);
       }
       return;
     }
@@ -157,22 +165,24 @@ Future<void> importPasswords(
     await storePasswords(mergedPasswords);
 
     if (context.mounted) {
-      sendScaffoldMessenge(context, 'Passwords imported successfully!', true);
+      sendScaffoldMessenger(context, 'Passwords imported successfully!', true);
     }
   } on Exception catch (e) {
     Exception('Error: $e');
     if (context.mounted) {
-      sendScaffoldMessenge(
+      sendScaffoldMessenger(
           context, 'An error occurred while importing the passwords!', true);
     }
   }
 }
 
+/// A utility function to check if the password is correct.
 bool checkPassword(String password, String hashedPassword) {
   final String digest = sha256.convert(utf8.encode(password)).toString();
   return digest == hashedPassword;
 }
 
+/// A utility function to merge two lists of passwords.
 List mergePasswordsLists(List passwords, List importedPasswords) {
   for (final password in importedPasswords) {
     final existingWebsite = passwords.indexWhere(
@@ -194,7 +204,8 @@ List mergePasswordsLists(List passwords, List importedPasswords) {
   return passwords;
 }
 
-void sendScaffoldMessenge(BuildContext context, String message, bool pop) {
+/// A utility function to send a message using the ScaffoldMessenger.
+void sendScaffoldMessenger(BuildContext context, String message, bool pop) {
   if (pop) {
     context.pop();
   }
