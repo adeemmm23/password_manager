@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:password_manager/pages/views/components/save_password.dart';
 import 'package:password_manager/pages/views/components/select_website.dart';
 import '../../../components/expandable_pageview.dart';
@@ -98,7 +97,6 @@ showMasterPasswordBottomSheet(BuildContext context) {
                 onFieldSubmitted: (value) {
                   if (formKey.currentState!.validate()) {
                     importPasswords(context, value);
-                    context.pop();
                   }
                 },
               ),

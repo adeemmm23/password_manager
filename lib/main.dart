@@ -13,6 +13,9 @@ void main() async {
   await dotenv.load(fileName: ".env");
   final appRouter = AppRouter(isLocked: isLocked);
 
+  // empty passwords
+  // prefs.remove('passwords');
+
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
