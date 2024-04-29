@@ -43,6 +43,7 @@ class AppRouter {
     ],
   );
 
+  // TODO: Find a way to make this work when a masterKey is set
   // initial location
   String initialLocation(bool isLocked) {
     if (isLocked) {
