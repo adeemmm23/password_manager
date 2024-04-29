@@ -129,13 +129,10 @@ class CollectionAppBar extends StatelessWidget {
             ),
             IconButton(
               style: ButtonStyle(
-                foregroundColor: MaterialStateColor.resolveWith(
-                  (states) => Theme.of(context).colorScheme.onBackground,
-                ),
-                backgroundColor: MaterialStateColor.resolveWith(
-                  (states) =>
-                      Theme.of(context).colorScheme.primary.withAlpha(20),
-                ),
+                foregroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).colorScheme.onBackground.withAlpha(150)),
+                backgroundColor: MaterialStatePropertyAll(
+                    Theme.of(context).colorScheme.primary.withAlpha(20)),
               ),
               onPressed: () {},
               icon: const Icon(

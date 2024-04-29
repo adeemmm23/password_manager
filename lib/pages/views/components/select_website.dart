@@ -56,9 +56,8 @@ class _SelectWebsiteState extends State<SelectWebsite> {
               label: const Text("Select Website"),
               requestFocusOnTap: true,
               menuStyle: MenuStyle(
-                shape: MaterialStateProperty.resolveWith((states) =>
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20))),
+                shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20))),
               ),
               inputDecorationTheme: InputDecorationTheme(
                 filled: true,
