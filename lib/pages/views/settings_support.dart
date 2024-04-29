@@ -30,7 +30,6 @@ class _SupportState extends State<Support> {
       appBar: AppBar(
         title: const Text('Support'),
       ),
-      floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,7 +142,7 @@ class _SupportState extends State<Support> {
                   onTap: () async {
                     await launchUrl(
                         Uri.parse(
-                            'mailto:contact.adem.ot@gmail.com?subject=[What a Mirror] Problem&body=Hi, Tell us more about your issue here:'),
+                            'mailto:contact.adem.ot@gmail.com?subject=[Lock] Problem&body=Hi, Tell us more about your issue here:'),
                         mode: LaunchMode.externalApplication);
                   },
                 ),

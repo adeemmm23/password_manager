@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-import 'package:crypto/crypto.dart';
 
+import 'package:crypto/crypto.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart'
@@ -12,21 +12,36 @@ import 'package:go_router/go_router.dart';
 import '../global/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-/// A utility function to get the stored passwords from the device.
-Future<List> getPasswords() async {
+/// A utility function to decrypt passwords list
+List decryptPasswords(String encryptedPasswords, Key key, IV iv) {
+  final encrypter = Encrypter(AES(key));
+  final decrypted = encrypter.decrypt64(encryptedPasswords, iv: iv);
+  final passwords = jsonDecode(decrypted);
+  return passwords;
+}
+
+/// A utility function to encrypt passwords list
+String encryptPasswords(List passwords, Key key, IV iv) {
   final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
   final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
+  final encrypter = Encrypter(AES(key));
+  final encrypted = encrypter.encrypt(jsonEncode(passwords), iv: iv);
+  final encryptedPasswords = encrypted.base64;
+  return encryptedPasswords;
+}
+
+/// A utility function to get the stored passwords from the device.
+Future<List> getPasswords() async {
   try {
+    final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
+    final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    final encrypter = Encrypter(AES(key));
-
     String? data = prefs.getString('passwords');
-    if (data != null) {
-      data = encrypter.decrypt64(data, iv: iv);
-      return jsonDecode(data);
+    if (data == null) {
+      return [];
     }
-    return [];
+    final passwords = decryptPasswords(data, key, iv);
+    return passwords;
   } on Exception catch (e) {
     Exception('Error: $e');
     return [];
@@ -35,13 +50,12 @@ Future<List> getPasswords() async {
 
 /// A utility function to store the passwords on the device.
 Future<void> storePasswords(List passwords) async {
-  final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
-  final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
   try {
+    final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
+    final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final encrypter = Encrypter(AES(key));
-    final encrypted = encrypter.encrypt(jsonEncode(passwords), iv: iv);
-    prefs.setString('passwords', encrypted.base64);
+    final encryptedPasswords = encryptPasswords(passwords, key, iv);
+    prefs.setString('passwords', encryptedPasswords);
   } on Exception catch (e) {
     Exception('Error: $e');
   }
@@ -55,11 +69,11 @@ Future<void> addPassword({
 }) async {
   try {
     final passwords = await getPasswords();
-    final existingWebsite =
+    final existingWebsiteIndex =
         passwords.indexWhere((item) => item['website'] == website);
 
-    if (existingWebsite != -1) {
-      passwords[existingWebsite]['accounts']
+    if (existingWebsiteIndex != -1) {
+      passwords[existingWebsiteIndex]['accounts']
           .add({'username': username, 'password': password});
     } else {
       passwords.add({
@@ -79,25 +93,30 @@ Future<void> addPassword({
 /// A utility function to remove a password from the stored passwords.
 Future<void> exportPasswords(BuildContext context) async {
   try {
+    // Check if there are passwords to export
     final prefs = await SharedPreferences.getInstance();
-    final passwords = prefs.getString('passwords');
+    final encryptedPasswords = prefs.getString('passwords');
 
-    if (passwords == null) {
+    if (encryptedPasswords == null) {
       // No passwords to export
       return;
     }
 
-    final String masterKey = dotenv.env['ENCRYPTION_KEY']!;
-    final String digest = sha256.convert(utf8.encode(masterKey)).toString();
+    // pack the encrypted passwords and the digisted master key together
+    final masterKey = dotenv.env['ENCRYPTION_KEY']!;
+    final digestMasterKey = sha256.convert(utf8.encode(masterKey)).toString();
+    final exported = digestMasterKey + encryptedPasswords;
+    final Uint8List data = Uint8List.fromList(exported.codeUnits);
 
-    final String export = digest + passwords;
+    // Get the current date and time for the file name
+    final instant = DateTime.now();
+    final date = '${instant.year}-${instant.month}-${instant.day}';
+    final time = '${instant.hour}-${instant.minute}-${instant.second}';
 
-    final Uint8List data = Uint8List.fromList(export.codeUnits);
-
-    final String date = DateTime.now().toIso8601String();
+    // Save the passwords to a file
     final String? outputFile = await FilePicker.platform.saveFile(
       dialogTitle: 'Please save it somewhere safe:',
-      fileName: 'passwords-$date.txt',
+      fileName: 'passwords-$date-$time.txt',
       bytes: data,
     );
 
@@ -124,24 +143,27 @@ Future<void> importPasswords(
   String masterKey,
 ) async {
   try {
-    final FilePickerResult? result = await FilePicker.platform
+    // Check if there is a file to import
+    final FilePickerResult? pickedFile = await FilePicker.platform
         .pickFiles(type: FileType.custom, allowedExtensions: ['txt']);
-    if (result == null) {
+
+    if (pickedFile == null) {
       // User canceled the operation
       return;
     }
 
-    final String? file = result.files.single.path;
-    if (file == null) {
+    final String? filePath = pickedFile.files.single.path;
+    if (filePath == null) {
       // No file selected
       return;
     }
 
-    final String data = await File(file).readAsString();
-
+    // Read the file content
+    final String data = await File(filePath).readAsString();
     final dataMasterKey = data.substring(0, 64);
+    final isMasterKeyValid = checkPassword(masterKey, dataMasterKey);
 
-    if (!checkPassword(masterKey, dataMasterKey)) {
+    if (!isMasterKeyValid) {
       // Invalid master password
       if (context.mounted) {
         sendScaffoldMessenger(context, 'Invalid master password!', true);
@@ -153,11 +175,7 @@ Future<void> importPasswords(
     final encryptedPasswords = data.substring(64);
     final key = Key.fromUtf8(masterKey);
     final iv = IV.fromUtf8(masterKey);
-
-    // Decrypt the passwords
-    final encrypter = Encrypter(AES(key));
-    final decrypted = encrypter.decrypt64(encryptedPasswords, iv: iv);
-    final passwords = jsonDecode(decrypted);
+    final passwords = decryptPasswords(encryptedPasswords, key, iv);
 
     // Merge the imported passwords with the existing ones
     final currentPasswords = await getPasswords();
@@ -185,22 +203,21 @@ bool checkPassword(String password, String hashedPassword) {
 /// A utility function to merge two lists of passwords.
 List mergePasswordsLists(List passwords, List importedPasswords) {
   for (final password in importedPasswords) {
-    final existingWebsite = passwords.indexWhere(
+    final existingWebsiteIndex = passwords.indexWhere(
       (item) => item['website'] == password['website'],
     );
 
-    if (existingWebsite != -1) {
+    if (existingWebsiteIndex != -1) {
       for (final account in password['accounts']) {
-        if (passwords[existingWebsite]['accounts']
+        if (passwords[existingWebsiteIndex]['accounts']
             .every((item) => item['username'] != account['username'])) {
-          passwords[existingWebsite]['accounts'].add(account);
+          passwords[existingWebsiteIndex]['accounts'].add(account);
         }
       }
     } else {
       passwords.add(password);
     }
   }
-
   return passwords;
 }
 

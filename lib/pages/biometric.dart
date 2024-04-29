@@ -27,25 +27,23 @@ class _BiometricState extends State<Biometric> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Hero(
-            tag: 'logo',
-            child: Image.asset(
-              'assets/logo/lock.png',
-              color: Theme.of(context).colorScheme.primary,
-              height: 25,
-            ),
+          Image.asset(
+            'assets/logo/lock.png',
+            color: Theme.of(context).colorScheme.primary,
+            height: 25,
           ),
           const SizedBox(height: 20),
           const Text('Tap to unlock'),
           const SizedBox(height: 20),
           IconButton(
-              onPressed: () {
-                authenticate();
-              },
-              icon: const Icon(
-                Symbols.lock_open_rounded,
-                weight: 700,
-              ))
+            onPressed: () {
+              authenticate();
+            },
+            icon: const Icon(
+              Symbols.lock_open_rounded,
+              weight: 700,
+            ),
+          )
         ],
       ),
     ));
