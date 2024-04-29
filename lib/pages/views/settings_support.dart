@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+// TODO: Refactor this to be more cheap
 class Support extends StatefulWidget {
   const Support({super.key});
 
@@ -235,6 +236,7 @@ class _SupportState extends State<Support> {
   }
 }
 
+// TODO: Make this a reusable widget
 class SupportAppBar extends StatelessWidget {
   const SupportAppBar({
     super.key,
