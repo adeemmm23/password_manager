@@ -3,7 +3,6 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:password_manager/components/rounded_appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-// TODO: Refactor this to be more cheap
 class SupportPage extends StatefulWidget {
   const SupportPage({super.key});
 
@@ -15,15 +14,15 @@ class _SupportPageState extends State<SupportPage> {
   String? selectedHelp;
   List<String> historyList = [];
   List<String> helpList = [
-    'How to create a new password',
-    'How to generate a strong password',
-    'How to save a password securely',
-    'How to update an existing password',
-    'How to delete a saved password',
-    'How to search for a saved password',
-    'How to organize passwords into categories',
-    'How to enable two-factor authentication',
-    'How to recover a forgotten password'
+    'Creating a new password',
+    'Generating a strong password',
+    'Saving a password securely',
+    'Updating an existing password',
+    'Deleting a saved password',
+    'Searching for a saved password',
+    'Organizing passwords into categories',
+    'Enabling two-factor authentication',
+    'Recovering a forgotten password'
   ];
 
   @override
@@ -37,148 +36,58 @@ class _SupportPageState extends State<SupportPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.only(left: 20, bottom: 20, top: 20),
-              child: Text('Popular Questions',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                  )),
-            ),
-            ListTile(
-                leading: CircleAvatar(
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                  child: Icon(
-                    Symbols.chat_bubble_outline_rounded,
-                    size: 22,
-                    weight: 700,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-                title: const Text('You forgot your master password'),
-                onTap: () {}),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                child: Icon(
-                  Symbols.chat_bubble_outline_rounded,
-                  size: 22,
-                  weight: 700,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              title: const Text('How to enable biometric authentication'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor:
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1),
-                child: Icon(
-                  Symbols.chat_bubble_outline_rounded,
-                  weight: 700,
-                  size: 22,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              title: const Text('How to change the app theme'),
-              onTap: () {},
-            ),
+            const SupportTitle(title: "Popular questions"),
+            const PopularQuestion(title: 'I forgot my master key'),
+            const PopularQuestion(title: 'How to move to a new phone'),
+            const PopularQuestion(title: 'How to enable fingerprint unlock'),
             Padding(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
               child: SearchAnchor.bar(
                 barBackgroundColor: MaterialStatePropertyAll(
                     Theme.of(context).colorScheme.primary.withOpacity(0.1)),
                 barElevation: const MaterialStatePropertyAll(0),
-                barHintText: 'Search Help',
-                suggestionsBuilder: (context, controller) {
-                  if (controller.text.isEmpty) {
-                    if (historyList.isNotEmpty) {
-                      return getHistoryList(controller);
-                    } else {
-                      return <Widget>[
-                        Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 25),
-                            child: Text('No search history.',
-                                style: TextStyle(
-                                    color: Theme.of(context).hintColor)),
-                          ),
-                        )
-                      ];
-                    }
-                  }
-                  return getSuggestions(controller);
-                },
+                barHintText: 'Search help',
+                suggestionsBuilder: (context, searchController) =>
+                    search(context, searchController),
               ),
             ),
-            const Divider(
-              indent: 20,
-              endIndent: 20,
-              height: 50,
+            const Divider(indent: 20, endIndent: 20, height: 50),
+            const SupportTitle(title: "Need more help?"),
+            const SupportCard(
+              title: 'Contact Support',
+              icon: Symbols.support,
+              subtitle: 'Get help from our support team',
+              subject: '[Lock] Support',
             ),
-            const Padding(
-              padding: EdgeInsets.only(left: 20, bottom: 20),
-              child: Text('Need more help?',
-                  textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                  )),
+            const SupportCard(
+              title: 'Send Feedback',
+              icon: Symbols.feedback,
+              subtitle: 'Share your thoughts with us',
+              subject: '[Lock] Feedback',
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                shadowColor: Colors.transparent,
-                child: ListTile(
-                  leading: Icon(
-                    Symbols.support,
-                    weight: 700,
-                    size: 22,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  title: const Text('Contact us'),
-                  subtitle:
-                      const Text('Tell us more, and we\'ll help you get there'),
-                  onTap: () async {
-                    await launchUrl(
-                        Uri.parse(
-                            'mailto:contact.adem.ot@gmail.com?subject=[Lock] Problem&body=Hi, Tell us more about your issue here:'),
-                        mode: LaunchMode.externalApplication);
-                  },
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                shadowColor: Colors.transparent,
-                child: ListTile(
-                  leading: Icon(
-                    Symbols.feedback_rounded,
-                    weight: 700,
-                    size: 22,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                  title: const Text('Send Feedback'),
-                  subtitle:
-                      const Text('Your feedback helps us improve the app'),
-                  onTap: () async {
-                    await launchUrl(
-                        Uri.parse(
-                            'mailto:contact.adem.ot@gmail.com?subject=[What a Mirror] Feedback&body=Your feedback:'),
-                        mode: LaunchMode.externalApplication);
-                  },
-                ),
-              ),
-            )
           ],
         ),
       ),
     );
+  }
+
+  Iterable<Widget> search(BuildContext context, SearchController controller) {
+    if (controller.text.isEmpty) {
+      if (historyList.isNotEmpty) {
+        return getHistoryList(controller);
+      } else {
+        return <Widget>[
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 25),
+              child: Text('No search history.',
+                  style: TextStyle(color: Theme.of(context).hintColor)),
+            ),
+          )
+        ];
+      }
+    }
+    return getSuggestions(controller);
   }
 
   Iterable<Widget> getHistoryList(SearchController controller) {
@@ -193,7 +102,6 @@ class _SupportPageState extends State<SupportPage> {
           controller.closeView(e);
           controller.text = e;
           handleSelection(e);
-
           controller.clear();
         },
       );
@@ -215,7 +123,6 @@ class _SupportPageState extends State<SupportPage> {
           controller.closeView(e);
           controller.text = e;
           handleSelection(e);
-
           controller.clear();
         },
       );
@@ -233,5 +140,92 @@ class _SupportPageState extends State<SupportPage> {
       }
       historyList.insert(0, value!);
     });
+  }
+}
+
+// Custom widgets
+class SupportCard extends StatelessWidget {
+  final String title;
+  final IconData icon;
+  final String subtitle;
+  final String subject;
+  const SupportCard({
+    super.key,
+    required this.title,
+    required this.icon,
+    required this.subtitle,
+    required this.subject,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      child: Card(
+        clipBehavior: Clip.antiAliasWithSaveLayer,
+        shadowColor: Colors.transparent,
+        child: ListTile(
+          leading: Icon(
+            Symbols.support,
+            weight: 700,
+            size: 22,
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          title: Text(title),
+          subtitle: Text(subtitle),
+          onTap: () async {
+            await launchUrl(
+              Uri.parse('mailto:contact.adem.ot@gmail.com?subject=$subject'),
+              mode: LaunchMode.externalApplication,
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class SupportTitle extends StatelessWidget {
+  final String title;
+  const SupportTitle({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, bottom: 20, top: 20),
+      child: Text(
+        title,
+        textAlign: TextAlign.left,
+        style: const TextStyle(fontWeight: FontWeight.w500),
+      ),
+    );
+  }
+}
+
+class PopularQuestion extends StatelessWidget {
+  final String title;
+  const PopularQuestion({
+    super.key,
+    required this.title,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+        child: Icon(
+          Symbols.chat_bubble_outline_rounded,
+          size: 22,
+          weight: 700,
+          color: Theme.of(context).colorScheme.primary,
+        ),
+      ),
+      title: Text(title),
+      onTap: () {},
+    );
   }
 }
