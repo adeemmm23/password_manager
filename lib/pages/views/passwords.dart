@@ -3,7 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:password_manager/utils/passwords_storage.dart';
 
-import '../../global/structure.dart';
+import '../../global/model.dart';
 
 class Passwords extends StatefulWidget {
   const Passwords({

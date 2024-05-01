@@ -9,7 +9,7 @@ import 'package:flutter/material.dart'
     show BuildContext, ScaffoldMessenger, SnackBar, Text;
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:password_manager/global/structure.dart';
+import 'package:password_manager/global/model.dart';
 import '../global/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

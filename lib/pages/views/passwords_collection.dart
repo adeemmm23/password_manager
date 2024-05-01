@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:password_manager/global/structure.dart';
+import 'package:password_manager/global/model.dart';
 
 class CollectionPage extends StatelessWidget {
   const CollectionPage({super.key, required this.password});
