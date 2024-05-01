@@ -32,41 +32,38 @@ class _SupportPageState extends State<SupportPage> {
         preferredSize: Size.fromHeight(100),
         child: RoundedAppBar(title: 'Support'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SupportTitle(title: "Popular questions"),
-            const PopularQuestion(title: 'I forgot my master key'),
-            const PopularQuestion(title: 'How to move to a new phone'),
-            const PopularQuestion(title: 'How to enable fingerprint unlock'),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
-              child: SearchAnchor.bar(
-                barBackgroundColor: MaterialStatePropertyAll(
-                    Theme.of(context).colorScheme.primary.withOpacity(0.1)),
-                barElevation: const MaterialStatePropertyAll(0),
-                barHintText: 'Search help',
-                suggestionsBuilder: (context, searchController) =>
-                    search(context, searchController),
-              ),
+      body: ListView(
+        children: [
+          const SupportTitle(title: "Popular questions"),
+          const PopularQuestion(title: 'I forgot my master key'),
+          const PopularQuestion(title: 'How to move to a new phone'),
+          const PopularQuestion(title: 'How to enable fingerprint unlock'),
+          Padding(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+            child: SearchAnchor.bar(
+              barBackgroundColor: MaterialStatePropertyAll(
+                  Theme.of(context).colorScheme.primary.withOpacity(0.1)),
+              barElevation: const MaterialStatePropertyAll(0),
+              barHintText: 'Search help',
+              suggestionsBuilder: (context, searchController) =>
+                  search(context, searchController),
             ),
-            const Divider(indent: 20, endIndent: 20, height: 50),
-            const SupportTitle(title: "Need more help?"),
-            const SupportCard(
-              title: 'Contact Support',
-              icon: Symbols.support,
-              subtitle: 'Get help from our support team',
-              subject: '[Lock] Support',
-            ),
-            const SupportCard(
-              title: 'Send Feedback',
-              icon: Symbols.feedback,
-              subtitle: 'Share your thoughts with us',
-              subject: '[Lock] Feedback',
-            ),
-          ],
-        ),
+          ),
+          const Divider(indent: 20, endIndent: 20, height: 50),
+          const SupportTitle(title: "Need more help?"),
+          const SupportCard(
+            title: 'Contact Support',
+            icon: Symbols.support,
+            subtitle: 'Get help from our support team',
+            subject: '[Lock] Support',
+          ),
+          const SupportCard(
+            title: 'Send Feedback',
+            icon: Symbols.feedback,
+            subtitle: 'Share your thoughts with us',
+            subject: '[Lock] Feedback',
+          ),
+        ],
       ),
     );
   }
@@ -159,27 +156,25 @@ class SupportCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
-      child: Card(
-        clipBehavior: Clip.antiAliasWithSaveLayer,
-        shadowColor: Colors.transparent,
-        child: ListTile(
-          leading: Icon(
-            Symbols.support,
-            weight: 700,
-            size: 22,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          title: Text(title),
-          subtitle: Text(subtitle),
-          onTap: () async {
-            await launchUrl(
-              Uri.parse('mailto:contact.adem.ot@gmail.com?subject=$subject'),
-              mode: LaunchMode.externalApplication,
-            );
-          },
+    return Card(
+      margin: const EdgeInsets.only(left: 12, right: 12, top: 4, bottom: 4),
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      shadowColor: Colors.transparent,
+      child: ListTile(
+        leading: Icon(
+          Symbols.support,
+          weight: 700,
+          size: 22,
+          color: Theme.of(context).colorScheme.primary,
         ),
+        title: Text(title),
+        subtitle: Text(subtitle),
+        onTap: () {
+          launchUrl(
+            Uri.parse('mailto:contact.adem.ot@gmail.com?subject=$subject'),
+            mode: LaunchMode.externalApplication,
+          );
+        },
       ),
     );
   }
