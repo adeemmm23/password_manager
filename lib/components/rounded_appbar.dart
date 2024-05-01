@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+// TODO: Add actions support
 /// The following is a skeleton of a `Support` page appbar.
 /// ```dart
 /// PreferredSize(
@@ -9,6 +10,7 @@ import 'package:material_symbols_icons/symbols.dart';
 ///   child: RoundedAppBar(title: 'Support'),
 /// )
 /// ```
+/// I'll be adding acrtions support later.
 class RoundedAppBar extends StatelessWidget {
   final String title;
   final List<Widget> actions;

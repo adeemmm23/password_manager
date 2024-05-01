@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:password_manager/components/appbar.dart';
+import 'package:password_manager/components/rounded_appbar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // TODO: Refactor this to be more cheap
