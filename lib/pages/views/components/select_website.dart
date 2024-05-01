@@ -69,8 +69,8 @@ class _SelectWebsiteState extends State<SelectWebsite> {
               dropdownMenuEntries: [
                 for (var item in allPasswords)
                   DropdownMenuEntry(
-                    value: item['website'],
-                    label: item['website'],
+                    value: item.name,
+                    label: item.name,
                   ),
               ],
               onSelected: (value) {
