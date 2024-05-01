@@ -4,14 +4,14 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 // TODO: Refactor this to be more cheap
-class Support extends StatefulWidget {
-  const Support({super.key});
+class SupportPage extends StatefulWidget {
+  const SupportPage({super.key});
 
   @override
-  State<Support> createState() => _SupportState();
+  State<SupportPage> createState() => _SupportPageState();
 }
 
-class _SupportState extends State<Support> {
+class _SupportPageState extends State<SupportPage> {
   String? selectedHelp;
   List<String> historyList = [];
   List<String> helpList = [

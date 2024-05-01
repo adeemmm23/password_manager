@@ -32,7 +32,7 @@ class AppRouter {
         path: '/support',
         pageBuilder: (context, state) => const MaterialPage(
           name: 'support',
-          child: Support(),
+          child: SupportPage(),
         ),
       ),
       GoRoute(
