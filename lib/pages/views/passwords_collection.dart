@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:password_manager/global/structure.dart';
 
-class Collection extends StatelessWidget {
-  const Collection({super.key, required this.password});
+class CollectionPage extends StatelessWidget {
+  const CollectionPage({super.key, required this.password});
 
-  final Map password;
+  final Collection password;
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +21,10 @@ class Collection extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 20, bottom: 15, left: 10),
-            child: Text(password['website'],
+            child: Text(password.name,
                 style: Theme.of(context).textTheme.headlineLarge),
           ),
-          for (var account in password['accounts'])
+          for (var account in password.accounts)
             CollectionsCards(account: account),
         ],
       ),
@@ -37,7 +38,7 @@ class CollectionsCards extends StatefulWidget {
     required this.account,
   });
 
-  final Map account;
+  final Account account;
 
   @override
   State<CollectionsCards> createState() => _CollectionsCardsState();
@@ -56,8 +57,7 @@ class _CollectionsCardsState extends State<CollectionsCards> {
           isObscure = !isObscure;
         }),
         onLongPress: () async {
-          await Clipboard.setData(
-              ClipboardData(text: widget.account['password']));
+          await Clipboard.setData(ClipboardData(text: widget.account.password));
           if (context.mounted) {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -67,10 +67,10 @@ class _CollectionsCardsState extends State<CollectionsCards> {
             );
           }
         },
-        title: Text(widget.account['username']),
+        title: Text(widget.account.username),
         subtitle: Text(isObscure
-            ? '•' * widget.account['password'].length
-            : widget.account['password']),
+            ? '•' * widget.account.password.length
+            : widget.account.password),
         trailing: IconButton(
           icon: const Icon(
             Symbols.more_vert_rounded,

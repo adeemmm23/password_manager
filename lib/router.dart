@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:password_manager/global/structure.dart';
 import 'package:password_manager/pages/views/passwords_collection.dart';
 import 'package:password_manager/pages/views/settings_support.dart';
 import 'pages/home.dart';
@@ -37,7 +38,7 @@ class AppRouter {
         path: '/collection',
         pageBuilder: (context, state) => MaterialPage(
           name: 'collection',
-          child: Collection(password: state.extra as Map),
+          child: CollectionPage(password: state.extra as Collection),
         ),
       ),
     ],

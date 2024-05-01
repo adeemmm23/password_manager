@@ -9,6 +9,7 @@ import 'package:flutter/material.dart'
     show BuildContext, ScaffoldMessenger, SnackBar, Text;
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:password_manager/global/structure.dart';
 import '../global/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +32,7 @@ String encryptPasswords(List passwords, Key key, IV iv) {
 }
 
 /// A utility function to get the stored passwords from the device.
-Future<List> getPasswords() async {
+Future<List<Collection>> getPasswords() async {
   try {
     final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
     final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
@@ -41,7 +42,7 @@ Future<List> getPasswords() async {
       return [];
     }
     final passwords = decryptPasswords(data, key, iv);
-    return passwords;
+    return passwords.map((e) => Collection.fromMap(e)).toList();
   } on Exception catch (e) {
     Exception('Error: $e');
     return [];
@@ -49,12 +50,13 @@ Future<List> getPasswords() async {
 }
 
 /// A utility function to store the passwords on the device.
-Future<void> storePasswords(List passwords) async {
+Future<void> storePasswords(List<Collection> passwords) async {
   try {
     final key = Key.fromUtf8(dotenv.env['ENCRYPTION_KEY']!);
     final iv = IV.fromUtf8(dotenv.env['ENCRYPTION_IV']!);
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final encryptedPasswords = encryptPasswords(passwords, key, iv);
+    final mapPasswords = passwords.map((e) => e.toMap()).toList();
+    final encryptedPasswords = encryptPasswords(mapPasswords, key, iv);
     prefs.setString('passwords', encryptedPasswords);
   } on Exception catch (e) {
     Exception('Error: $e');
@@ -69,19 +71,18 @@ Future<void> addPassword({
 }) async {
   try {
     final passwords = await getPasswords();
-    final existingWebsiteIndex =
-        passwords.indexWhere((item) => item['website'] == website);
 
-    if (existingWebsiteIndex != -1) {
-      passwords[existingWebsiteIndex]['accounts']
-          .add({'username': username, 'password': password});
+    // if the website already exists, add the account to it
+    final websiteIndex = passwords.indexWhere((item) => item.name == website);
+    if (websiteIndex != -1) {
+      passwords[websiteIndex]
+          .accounts
+          .add(Account(username: username, password: password));
     } else {
-      passwords.add({
-        'website': website,
-        'accounts': [
-          {'username': username, 'password': password}
-        ]
-      });
+      // create a new website and add the account to it
+      passwords.add(Collection(
+          name: website,
+          accounts: [Account(username: username, password: password)]));
     }
 
     await storePasswords(passwords);
@@ -180,7 +181,9 @@ Future<void> importPasswords(
     // Merge the imported passwords with the existing ones
     final currentPasswords = await getPasswords();
     final mergedPasswords = mergePasswordsLists(currentPasswords, passwords);
-    await storePasswords(mergedPasswords);
+    final collectionPasswords =
+        mergedPasswords.map((e) => Collection.fromMap(e)).toList();
+    await storePasswords(collectionPasswords);
 
     if (context.mounted) {
       sendScaffoldMessenger(context, 'Passwords imported successfully!', true);

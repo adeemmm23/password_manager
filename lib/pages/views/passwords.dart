@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:password_manager/utils/passwords_storage.dart';
 
+import '../../global/structure.dart';
+
 class Passwords extends StatefulWidget {
   const Passwords({
     super.key,
@@ -103,7 +105,7 @@ class PasswordsTitle extends StatelessWidget {
 class PasswordsCard extends StatelessWidget {
   const PasswordsCard({super.key, required this.password});
 
-  final Map password;
+  final Collection password;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -119,8 +121,8 @@ class PasswordsCard extends StatelessWidget {
             color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
-        title: Text(password['website']),
-        subtitle: Text("${password['accounts'].length.toString()} accounts"),
+        title: Text(password.name),
+        subtitle: Text("${password.length.toString()} accounts"),
         trailing: const Icon(Symbols.arrow_right_rounded,
             weight: 600, opticalSize: 28),
         onTap: () {
