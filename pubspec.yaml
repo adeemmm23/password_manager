@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  go_router: ^13.2.4
+  go_router: ^14.0.2
   local_auth: ^2.1.8
   material_symbols_icons: ^4.2719.3
   shared_preferences: ^2.2.3

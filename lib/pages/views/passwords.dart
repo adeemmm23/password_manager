@@ -126,7 +126,7 @@ class PasswordsCard extends StatelessWidget {
         trailing: const Icon(Symbols.arrow_right_rounded,
             weight: 600, opticalSize: 28),
         onTap: () {
-          context.push("/collection", extra: password);
+          context.push("/collection", extra: password.toMap());
         },
       ),
     );

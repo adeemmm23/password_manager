@@ -6,12 +6,12 @@ import 'package:password_manager/global/model.dart';
 import '../../components/rounded_appbar.dart';
 
 class CollectionPage extends StatelessWidget {
-  const CollectionPage({super.key, required this.password});
+  const CollectionPage({super.key, required this.data});
 
-  final Collection password;
-
+  final Map<String, dynamic> data;
   @override
   Widget build(BuildContext context) {
+    final password = Collection.fromMap(data);
     return Scaffold(
       appBar: const PreferredSize(
           preferredSize: Size.fromHeight(100),

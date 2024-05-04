@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:password_manager/global/model.dart';
 import 'package:password_manager/pages/views/passwords_collection.dart';
 import 'package:password_manager/pages/views/settings_support.dart';
 import 'pages/home.dart';
 import 'pages/biometric.dart';
 
-// TODO: Fix the serialization error
 class AppRouter {
   AppRouter({required this.isLocked});
   final bool isLocked;
@@ -39,7 +37,7 @@ class AppRouter {
         path: '/collection',
         pageBuilder: (context, state) => MaterialPage(
           name: 'collection',
-          child: CollectionPage(password: state.extra as Collection),
+          child: CollectionPage(data: state.extra as Map<String, dynamic>),
         ),
       ),
     ],
