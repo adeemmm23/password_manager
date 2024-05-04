@@ -4,7 +4,7 @@ import 'package:material_symbols_icons/symbols.dart';
 import 'package:password_manager/pages/views/passwords.dart';
 import 'package:password_manager/pages/views/settings.dart';
 
-import 'views/components/bottom_sheet.dart';
+import 'views/passwords_generate.dart';
 
 class Home extends StatefulWidget {
   const Home({

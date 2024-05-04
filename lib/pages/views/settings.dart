@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../global/theme.dart';
 import '../../utils/passwords_storage.dart';
-import 'components/bottom_sheet.dart';
+import 'settings_master_key.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
