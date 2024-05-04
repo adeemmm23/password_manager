@@ -100,7 +100,6 @@ class _SettingsState extends State<Settings> {
               title: 'Change Theme',
               onTap: () {},
             ),
-            // TODO: Remember this
             const SettingsDivider(),
             SettingsListTile(
               trailing: Switch(
@@ -110,7 +109,8 @@ class _SettingsState extends State<Settings> {
                 value: context.watch<ThemeCubit>().state == ThemeMode.dark,
                 onChanged: (value) {
                   context.read<ThemeCubit>().toggleThemeMode(
-                      value ? ThemeState.dark : ThemeState.light);
+                        value ? ThemeState.dark : ThemeState.light,
+                      );
                 },
               ),
               leading: const Icon(Symbols.dark_mode_rounded, weight: 700),

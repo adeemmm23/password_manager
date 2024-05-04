@@ -12,6 +12,7 @@ void main() async {
   final isLocked = prefs.getBool('pinLock') ?? false;
   await dotenv.load(fileName: ".env");
   final appRouter = AppRouter(isLocked: isLocked);
+  final themeCubit = ThemeCubit()..initState();
 
   // empty passwords
   // prefs.remove('passwords');
@@ -20,22 +21,25 @@ void main() async {
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
-  runApp(MainApp(appRouter));
+  runApp(MainApp(
+    appRouter: appRouter,
+    themeCubit: themeCubit,
+  ));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp(
-    this.appRouter, {
+  const MainApp({
     super.key,
+    required this.appRouter,
+    required this.themeCubit,
   });
 
   final AppRouter appRouter;
+  final ThemeCubit themeCubit;
   @override
   Widget build(BuildContext context) {
-    debugPrint("Building MainApp");
-
-    return BlocProvider(
-      create: (context) => ThemeCubit(),
+    return BlocProvider.value(
+      value: themeCubit,
       child: BlocBuilder<ThemeCubit, ThemeMode>(
           builder: (context, ThemeMode themeMode) {
         return MaterialApp.router(
