@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../global/color.dart';
+import '../../global/bloc/color_bloc.dart';
 
 class SettingsColors extends StatelessWidget {
   const SettingsColors({super.key});

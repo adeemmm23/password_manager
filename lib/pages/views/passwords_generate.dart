@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'passwords_generate/page_bloc.dart';
-import 'passwords_generate/controller_bloc.dart';
+import 'passwords_generate/bloc/page_bloc.dart';
+import 'passwords_generate/bloc/controller_bloc.dart';
 import 'passwords_generate/select_password.dart';
 import 'passwords_generate/select_website.dart';
 import '../../components/expandable_pageview.dart';

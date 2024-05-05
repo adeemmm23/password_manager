@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
-import 'controller_bloc.dart';
+import 'bloc/controller_bloc.dart';
 import '../../../utils/password_generator.dart';
 import '../../../utils/passwords_storage.dart';
 import '../../../utils/validators.dart';
