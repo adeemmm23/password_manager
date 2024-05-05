@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:password_manager/global/color.dart';
+import 'package:password_manager/global/bloc/color_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'global/constants.dart';
-import 'global/theme.dart';
+import 'global/bloc/theme_bloc.dart';
 import 'router.dart';
 
 void main() async {
