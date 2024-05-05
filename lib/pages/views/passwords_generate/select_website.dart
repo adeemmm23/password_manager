@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/utils/passwords_storage.dart';
+
+import 'page_bloc.dart';
+import 'controller_bloc.dart';
 
 class SelectWebsite extends StatefulWidget {
   const SelectWebsite({
     super.key,
-    required this.dropDownController,
-    required this.pageController,
-    required this.setState,
   });
-
-  final TextEditingController dropDownController;
-  final PageController pageController;
-  final Function setState;
 
   @override
   State<SelectWebsite> createState() => _SelectWebsiteState();
@@ -19,6 +16,7 @@ class SelectWebsite extends StatefulWidget {
 
 class _SelectWebsiteState extends State<SelectWebsite> {
   List allPasswords = [];
+  final dropDownController = TextEditingController();
 
   @override
   void initState() {
@@ -51,7 +49,7 @@ class _SelectWebsiteState extends State<SelectWebsite> {
             ),
             const SizedBox(height: 15),
             DropdownMenu(
-              controller: widget.dropDownController,
+              controller: dropDownController,
               width: MediaQuery.of(context).size.width * 0.9,
               label: const Text("Select Website"),
               requestFocusOnTap: true,
@@ -74,13 +72,12 @@ class _SelectWebsiteState extends State<SelectWebsite> {
                   ),
               ],
               onSelected: (value) {
-                if (widget.dropDownController.text.trim().isNotEmpty) {
-                  widget.setState(() {
-                    FocusScope.of(context).unfocus();
-                    widget.pageController.nextPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOutCubic);
-                  });
+                if (dropDownController.text.trim().isNotEmpty) {
+                  context
+                      .read<ControllerCubit>()
+                      .update(dropDownController.text.trim());
+                  FocusScope.of(context).unfocus();
+                  context.read<PageCubit>().nextPage();
                 }
               },
             ),

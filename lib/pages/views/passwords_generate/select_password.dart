@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import 'controller_bloc.dart';
 import '../../../utils/password_generator.dart';
 import '../../../utils/passwords_storage.dart';
 import '../../../utils/validators.dart';
@@ -8,10 +10,7 @@ import '../../../utils/validators.dart';
 class SavePassword extends StatefulWidget {
   const SavePassword({
     super.key,
-    required this.dropDownController,
   });
-
-  final TextEditingController dropDownController;
 
   @override
   State<SavePassword> createState() => _SavePasswordState();
@@ -135,7 +134,7 @@ class _SavePasswordState extends State<SavePassword> {
                   return;
                 }
                 addPassword(
-                  website: widget.dropDownController.text.trim(),
+                  website: context.read<ControllerCubit>().state,
                   username: usernameController.text.trim(),
                   password: passwordController.text,
                 );
