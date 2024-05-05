@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:password_manager/global/color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'global/constants.dart';
 import 'global/theme.dart';
@@ -24,6 +25,7 @@ void main() async {
   runApp(MainApp(
     appRouter: appRouter,
     themeCubit: themeCubit,
+    colorCubit: ColorCubit(),
   ));
 }
 
@@ -32,49 +34,59 @@ class MainApp extends StatelessWidget {
     super.key,
     required this.appRouter,
     required this.themeCubit,
+    required this.colorCubit,
   });
 
   final AppRouter appRouter;
   final ThemeCubit themeCubit;
+  final ColorCubit colorCubit;
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-      value: themeCubit,
-      child: BlocBuilder<ThemeCubit, ThemeMode>(
-          builder: (context, ThemeMode themeMode) {
-        return MaterialApp.router(
-          title: 'Lock',
-          debugShowCheckedModeBanner: false,
-          themeAnimationCurve: Curves.easeInOut,
-          theme: ThemeData(
-              pageTransitionsTheme: const PageTransitionsTheme(
-                builders: {
-                  TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                  TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: themeCubit),
+        BlocProvider.value(value: colorCubit),
+      ],
+      child: BlocBuilder<ColorCubit, MaterialColor>(
+        builder: (context, color) {
+          return BlocBuilder<ThemeCubit, ThemeMode>(
+              builder: (context, themeMode) {
+            return MaterialApp.router(
+              title: 'Lock',
+              debugShowCheckedModeBanner: false,
+              themeAnimationCurve: Curves.easeInOut,
+              theme: ThemeData(
+                  pageTransitionsTheme: const PageTransitionsTheme(
+                    builders: {
+                      TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                    },
+                  ),
+                  colorScheme: ColorScheme.fromSeed(
+                    brightness: Brightness.light,
+                    seedColor: color,
+                  )),
+              darkTheme: ThemeData(
+                pageTransitionsTheme: const PageTransitionsTheme(
+                  builders: {
+                    TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+                    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+                  },
+                ),
+                colorScheme: ColorScheme.fromSeed(
+                  brightness: Brightness.dark,
+                  seedColor: color,
+                ),
               ),
-              colorScheme: ColorScheme.fromSeed(
-                brightness: Brightness.light,
-                seedColor: Colors.green.shade500,
-              )),
-          darkTheme: ThemeData(
-            pageTransitionsTheme: const PageTransitionsTheme(
-              builders: {
-                TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-              },
-            ),
-            colorScheme: ColorScheme.fromSeed(
-              brightness: Brightness.dark,
-              seedColor: Colors.green.shade500,
-            ),
-          ),
-          themeMode: themeMode,
-          routeInformationParser: appRouter.router.routeInformationParser,
-          routeInformationProvider: appRouter.router.routeInformationProvider,
-          routerDelegate: appRouter.router.routerDelegate,
-        );
-      }),
+              themeMode: themeMode,
+              routeInformationParser: appRouter.router.routeInformationParser,
+              routeInformationProvider:
+                  appRouter.router.routeInformationProvider,
+              routerDelegate: appRouter.router.routerDelegate,
+            );
+          });
+        },
+      ),
     );
   }
 }

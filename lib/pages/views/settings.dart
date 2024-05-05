@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../global/theme.dart';
 import '../../utils/passwords_storage.dart';
 import 'settings_master_key.dart';
+import '../../global/color.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -94,12 +95,11 @@ class _SettingsState extends State<Settings> {
         const SettingsTitle('Visuals'),
         SettingsCard(
           children: [
-            SettingsListTile(
-              trailing: const Icon(Symbols.arrow_forward, weight: 700),
-              leading: const Icon(Symbols.color_lens_rounded, weight: 700),
+            const SettingsListTile(
+              leading: Icon(Symbols.color_lens_rounded, weight: 700),
               title: 'Change Theme',
-              onTap: () {},
             ),
+            const SettingsColor(),
             const SettingsDivider(),
             SettingsListTile(
               trailing: Switch(
@@ -190,15 +190,15 @@ class SettingsCard extends StatelessWidget {
 }
 
 class SettingsListTile extends StatelessWidget {
-  final Widget trailing;
-  final Widget leading;
+  final Widget? trailing;
+  final Widget? leading;
   final String title;
   final VoidCallback? onTap;
 
   const SettingsListTile({
     super.key,
-    required this.trailing,
-    required this.leading,
+    this.trailing,
+    this.leading,
     required this.title,
     this.onTap,
   });
@@ -253,6 +253,86 @@ class SettingsVerion extends StatelessWidget {
         'Version 1.0.0',
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodySmall,
+      ),
+    );
+  }
+}
+
+class SettingsColor extends StatefulWidget {
+  const SettingsColor({super.key});
+
+  @override
+  State<SettingsColor> createState() => _SettingsColorState();
+}
+
+class _SettingsColorState extends State<SettingsColor> {
+  Set<ColorState> selected = {ColorState.red};
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 1, bottom: 20),
+      child: SegmentedButton(
+        showSelectedIcon: false,
+        selected: selected,
+        segments: [
+          ButtonSegment(
+            value: ColorState.red,
+            label: Icon(
+              Symbols.circle,
+              fill: 1,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.red.shade200
+                  : Colors.red.shade400,
+            ),
+          ),
+          ButtonSegment(
+            value: ColorState.green,
+            label: Icon(
+              Symbols.circle,
+              fill: 1,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.green.shade200
+                  : Colors.green.shade400,
+            ),
+          ),
+          ButtonSegment(
+            value: ColorState.blue,
+            label: Icon(
+              Symbols.circle,
+              fill: 1,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.blue.shade200
+                  : Colors.blue.shade400,
+            ),
+          ),
+          ButtonSegment(
+            value: ColorState.purple,
+            label: Icon(
+              Symbols.circle,
+              fill: 1,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.purple.shade200
+                  : Colors.purple.shade400,
+            ),
+          ),
+          ButtonSegment(
+            value: ColorState.amber,
+            label: Icon(
+              Symbols.circle,
+              fill: 1,
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.amber.shade200
+                  : Colors.amber.shade400,
+            ),
+          ),
+        ],
+        onSelectionChanged: (value) {
+          context.read<ColorCubit>().toggleColors(value.last);
+          setState(() {
+            selected = value;
+          });
+        },
       ),
     );
   }
