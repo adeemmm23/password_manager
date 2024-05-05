@@ -6,12 +6,12 @@ class SelectWebsite extends StatefulWidget {
     super.key,
     required this.dropDownController,
     required this.pageController,
-    required this.localSetState,
+    required this.setState,
   });
 
   final TextEditingController dropDownController;
   final PageController pageController;
-  final Function localSetState;
+  final Function setState;
 
   @override
   State<SelectWebsite> createState() => _SelectWebsiteState();
@@ -75,7 +75,7 @@ class _SelectWebsiteState extends State<SelectWebsite> {
               ],
               onSelected: (value) {
                 if (widget.dropDownController.text.trim().isNotEmpty) {
-                  widget.localSetState(() {
+                  widget.setState(() {
                     FocusScope.of(context).unfocus();
                     widget.pageController.nextPage(
                         duration: const Duration(milliseconds: 300),

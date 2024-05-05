@@ -58,7 +58,14 @@ class _HomeState extends State<Home> {
           ),
           FilledButton(
             onPressed: () async {
-              await showPasswordModal(context);
+              await showModalBottomSheet(
+                isScrollControlled: true,
+                showDragHandle: true,
+                barrierLabel: "Bottom Sheet",
+                useSafeArea: true,
+                context: context,
+                builder: (context) => PasswordGenerate(),
+              );
             },
             child: const Icon(
               Symbols.add_rounded,

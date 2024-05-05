@@ -9,13 +9,9 @@ class SavePassword extends StatefulWidget {
   const SavePassword({
     super.key,
     required this.dropDownController,
-    required this.passwordController,
-    required this.usernameController,
   });
 
   final TextEditingController dropDownController;
-  final TextEditingController passwordController;
-  final TextEditingController usernameController;
 
   @override
   State<SavePassword> createState() => _SavePasswordState();
@@ -25,13 +21,15 @@ class _SavePasswordState extends State<SavePassword> {
   // Password Generator Settings
   Set<String> selected = {};
   double passwordLenght = 12;
+  final passwordController = TextEditingController();
+  final usernameController = TextEditingController();
 
   final formKey = GlobalKey<FormState>();
 
   @override
   void dispose() {
-    widget.passwordController.dispose();
-    widget.usernameController.dispose();
+    passwordController.dispose();
+    usernameController.dispose();
     super.dispose();
   }
 
@@ -58,7 +56,7 @@ class _SavePasswordState extends State<SavePassword> {
             ),
             const SizedBox(height: 15),
             TextFormField(
-              controller: widget.usernameController,
+              controller: usernameController,
               validator: ((value) => validateUsername(value)),
               decoration: InputDecoration(
                 label: const Text("Username"),
@@ -72,7 +70,7 @@ class _SavePasswordState extends State<SavePassword> {
             ),
             const SizedBox(height: 15),
             TextFormField(
-              controller: widget.passwordController,
+              controller: passwordController,
               validator: ((value) => validatePassword(value)),
               decoration: InputDecoration(
                 label: const Text("Password"),
@@ -122,7 +120,7 @@ class _SavePasswordState extends State<SavePassword> {
                 onChanged: (value) {
                   setState(() {
                     passwordLenght = value;
-                    widget.passwordController.text = generatePassword(
+                    passwordController.text = generatePassword(
                       numbers: selected.contains("numbers"),
                       uppercase: selected.contains("uppers"),
                       special: selected.contains("specials"),
@@ -132,19 +130,20 @@ class _SavePasswordState extends State<SavePassword> {
                 }),
             const SizedBox(height: 15),
             FilledButton(
-                onPressed: () {
-                  if (!formKey.currentState!.validate()) {
-                    return;
-                  }
-                  addPassword(
-                    website: widget.dropDownController.text.trim(),
-                    username: widget.usernameController.text.trim(),
-                    password: widget.passwordController.text,
-                  );
+              onPressed: () {
+                if (!formKey.currentState!.validate()) {
+                  return;
+                }
+                addPassword(
+                  website: widget.dropDownController.text.trim(),
+                  username: usernameController.text.trim(),
+                  password: passwordController.text,
+                );
 
-                  Navigator.pop(context);
-                },
-                child: const Text("Save Password")),
+                Navigator.pop(context);
+              },
+              child: const Text("Save Password"),
+            ),
             const SizedBox(height: 50),
           ],
         ),

@@ -21,8 +21,11 @@ void main() async {
   final color = prefs.getInt('color') ?? 0;
   final colorCubit = ColorCubit(color);
 
-  // empty passwords
+  // empty preferences
   // prefs.remove('passwords');
+  // prefs.remove('pinLock');
+  // prefs.remove('theme');
+  // prefs.remove('color');
 
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
