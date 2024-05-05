@@ -4,18 +4,17 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 // TODO: Think about system
 class ThemeCubit extends Cubit<ThemeMode> {
-  ThemeCubit() : super(ThemeMode.dark);
+  final int init;
+  ThemeCubit(this.init) : super(_getThemeFromIndex(init));
 
-  void initState() async {
-    final prefs = await SharedPreferences.getInstance();
-    final theme = prefs.getInt('theme') ?? 1;
-    switch (theme) {
+  static ThemeMode _getThemeFromIndex(int index) {
+    switch (index) {
       case 0:
-        emit(ThemeMode.light);
-        break;
+        return ThemeMode.light;
       case 1:
-        emit(ThemeMode.dark);
-        break;
+        return ThemeMode.dark;
+      default:
+        return ThemeMode.light;
     }
   }
 

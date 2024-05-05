@@ -266,13 +266,14 @@ class SettingsColor extends StatefulWidget {
 }
 
 class _SettingsColorState extends State<SettingsColor> {
-  Set<ColorState> selected = {ColorState.red};
+  Set<ColorState> selected = {};
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 1, bottom: 20),
       child: SegmentedButton(
+        emptySelectionAllowed: true,
         showSelectedIcon: false,
         selected: selected,
         segments: [
@@ -328,7 +329,7 @@ class _SettingsColorState extends State<SettingsColor> {
           ),
         ],
         onSelectionChanged: (value) {
-          context.read<ColorCubit>().toggleColors(value.last);
+          context.read<ColorCubit>().setColors(value.last);
           setState(() {
             selected = value;
           });

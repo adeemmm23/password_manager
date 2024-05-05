@@ -9,11 +9,17 @@ import 'router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final prefs = await SharedPreferences.getInstance();
-  final isLocked = prefs.getBool('pinLock') ?? false;
   await dotenv.load(fileName: ".env");
-  final appRouter = AppRouter(isLocked: isLocked);
-  final themeCubit = ThemeCubit()..initState();
+  final prefs = await SharedPreferences.getInstance();
+
+  final isLocked = prefs.getBool('pinLock') ?? false;
+  final appRouter = AppRouter(isLocked);
+
+  final theme = prefs.getInt('theme') ?? 0;
+  final themeCubit = ThemeCubit(theme);
+
+  final color = prefs.getInt('color') ?? 0;
+  final colorCubit = ColorCubit(color);
 
   // empty passwords
   // prefs.remove('passwords');
@@ -22,10 +28,11 @@ void main() async {
     statusBarColor: Colors.transparent,
     systemNavigationBarColor: Colors.transparent,
   ));
+
   runApp(MainApp(
     appRouter: appRouter,
     themeCubit: themeCubit,
-    colorCubit: ColorCubit(),
+    colorCubit: colorCubit,
   ));
 }
 
@@ -40,6 +47,7 @@ class MainApp extends StatelessWidget {
   final AppRouter appRouter;
   final ThemeCubit themeCubit;
   final ColorCubit colorCubit;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

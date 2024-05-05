@@ -7,7 +7,7 @@ import 'pages/home.dart';
 import 'pages/biometric.dart';
 
 class AppRouter {
-  AppRouter({required this.isLocked});
+  AppRouter(this.isLocked);
   final bool isLocked;
   late final router = GoRouter(
     debugLogDiagnostics: true,

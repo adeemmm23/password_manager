@@ -23,7 +23,7 @@ class SettingsColors extends StatelessWidget {
               ),
               child: FilledButton(
                 onPressed: () {
-                  context.read<ColorCubit>().toggleColors(ColorState.red);
+                  context.read<ColorCubit>().setColors(ColorState.red);
                 },
                 child: const Text('Red'),
               ),
@@ -37,7 +37,7 @@ class SettingsColors extends StatelessWidget {
               ),
               child: FilledButton(
                 onPressed: () {
-                  context.read<ColorCubit>().toggleColors(ColorState.green);
+                  context.read<ColorCubit>().setColors(ColorState.green);
                 },
                 child: const Text('Green'),
               ),
@@ -51,7 +51,7 @@ class SettingsColors extends StatelessWidget {
               ),
               child: FilledButton(
                 onPressed: () {
-                  context.read<ColorCubit>().toggleColors(ColorState.blue);
+                  context.read<ColorCubit>().setColors(ColorState.blue);
                 },
                 child: const Text('Blue'),
               ),

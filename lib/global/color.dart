@@ -2,27 +2,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// TODO: Think about system
 class ColorCubit extends Cubit<MaterialColor> {
-  ColorCubit() : super(Colors.red);
+  final int init;
+  ColorCubit(this.init) : super(_getColorFromIndex(init));
 
-  void initState() async {
-    final prefs = await SharedPreferences.getInstance();
-    final color = prefs.getInt('color') ?? 0;
-    switch (color) {
+  static MaterialColor _getColorFromIndex(int index) {
+    switch (index) {
       case 0:
-        emit(Colors.red);
-        break;
+        return Colors.red;
       case 1:
-        emit(Colors.green);
-        break;
+        return Colors.green;
       case 2:
-        emit(Colors.blue);
-        break;
+        return Colors.blue;
+      case 3:
+        return Colors.purple;
+      case 4:
+        return Colors.yellow;
+      default:
+        return Colors.red;
     }
   }
 
-  void toggleColors(ColorState value) async {
+  void setColors(ColorState value) async {
     final prefs = await SharedPreferences.getInstance();
     switch (value) {
       case ColorState.red:
@@ -42,7 +43,7 @@ class ColorCubit extends Cubit<MaterialColor> {
         prefs.setInt('color', 3);
         break;
       case ColorState.amber:
-        emit(Colors.yellow);
+        emit(Colors.amber);
         prefs.setInt('color', 4);
         break;
     }

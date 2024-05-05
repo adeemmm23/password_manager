@@ -57,14 +57,15 @@ class _HomeState extends State<Home> {
             label: 'Passwords',
           ),
           FilledButton(
-              onPressed: () async {
-                await showPasswordModal(context);
-              },
-              child: const Icon(
-                Symbols.add_rounded,
-                weight: 600,
-                opticalSize: 28,
-              )),
+            onPressed: () async {
+              await showPasswordModal(context);
+            },
+            child: const Icon(
+              Symbols.add_rounded,
+              weight: 600,
+              opticalSize: 28,
+            ),
+          ),
           NavigationDestination(
             icon: AnimatedSymbol(
               selected: selectedIndex == 2,

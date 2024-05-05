@@ -162,7 +162,7 @@ class SupportCard extends StatelessWidget {
       shadowColor: Colors.transparent,
       child: ListTile(
         leading: Icon(
-          Symbols.support,
+          icon,
           weight: 700,
           size: 22,
           color: Theme.of(context).colorScheme.primary,
