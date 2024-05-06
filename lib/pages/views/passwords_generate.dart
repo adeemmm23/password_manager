@@ -12,19 +12,19 @@ class PasswordGenerate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    final websiteValue = ControllerCubit();
+    final controllerCubit = ControllerCubit();
     final pageCubit = PageCubit();
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: websiteValue),
+        BlocProvider.value(value: controllerCubit),
         BlocProvider.value(value: pageCubit),
       ],
-      child: BlocBuilder<PageCubit, int?>(
+      child: BlocBuilder<PageCubit, double>(
         builder: (context, state) {
-          if (state != null && state != pageController.page?.toInt()) {
+          if (state != pageController.page) {
             pageController.animateToPage(
-              state,
+              state.toInt(),
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
             );
