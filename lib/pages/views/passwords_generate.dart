@@ -11,9 +11,7 @@ class PasswordGenerate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pageController = PageController(
-      initialPage: 0,
-    );
+    final pageController = PageController();
     final controllerCubit = ControllerCubit();
     final pageCubit = PageCubit();
 
@@ -23,6 +21,7 @@ class PasswordGenerate extends StatelessWidget {
         BlocProvider.value(value: pageCubit),
       ],
       child: BlocBuilder<PageCubit, double?>(
+        // TODO: Find a better way to handle this state
         builder: (context, state) {
           if (state != null && state != pageController.page) {
             pageController.animateToPage(

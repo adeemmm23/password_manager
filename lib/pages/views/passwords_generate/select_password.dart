@@ -90,9 +90,10 @@ class _SavePasswordState extends State<SavePassword> {
                       weight: 600,
                     )),
                 ButtonSegment(
-                    value: "specials",
-                    label: Text("Specials"),
-                    icon: Icon(Symbols.asterisk_rounded, weight: 600)),
+                  value: "specials",
+                  label: Text("Specials"),
+                  icon: Icon(Symbols.asterisk_rounded, weight: 600),
+                ),
               ],
               selected: selected,
               onSelectionChanged: (value) {
@@ -103,34 +104,32 @@ class _SavePasswordState extends State<SavePassword> {
             ),
             const SizedBox(height: 15),
             Slider(
-                divisions: 14,
-                label: passwordLenght.toInt().toString(),
-                min: 6.0,
-                max: 20.0,
-                value: passwordLenght,
-                onChanged: (value) {
-                  setState(() {
-                    passwordLenght = value;
-                    passwordController.text = generatePassword(
-                      numbers: selected.contains("numbers"),
-                      uppercase: selected.contains("uppers"),
-                      special: selected.contains("specials"),
-                      length: value,
-                    );
-                  });
-                }),
+              divisions: 14,
+              label: passwordLenght.toInt().toString(),
+              min: 6.0,
+              max: 20.0,
+              value: passwordLenght,
+              onChanged: (value) {
+                setState(() {
+                  passwordLenght = value;
+                  passwordController.text = generatePassword(
+                    numbers: selected.contains("numbers"),
+                    uppercase: selected.contains("uppers"),
+                    special: selected.contains("specials"),
+                    length: value,
+                  );
+                });
+              },
+            ),
             const SizedBox(height: 15),
             FilledButton(
               onPressed: () {
-                if (!formKey.currentState!.validate()) {
-                  return;
-                }
+                if (!formKey.currentState!.validate()) return;
                 addPassword(
                   website: context.read<ControllerCubit>().state,
                   username: usernameController.text.trim(),
-                  password: passwordController.text,
+                  password: passwordController.text.trim(),
                 );
-
                 Navigator.pop(context);
               },
               child: const Text("Save Password"),
