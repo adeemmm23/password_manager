@@ -41,12 +41,14 @@ class _SavePasswordState extends State<SavePassword> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text("Generate Password",
-                textAlign: TextAlign.center,
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                    )),
+            Text(
+              "Generate Password",
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
             const SizedBox(height: 3),
             Text(
               "Make sure to tap them correctly!",
