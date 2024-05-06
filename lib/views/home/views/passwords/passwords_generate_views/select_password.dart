@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 import 'bloc/controller_bloc.dart';
-import '../../../utils/password_generator.dart';
-import '../../../utils/passwords_storage.dart';
-import '../../../utils/validators.dart';
+import '../../../../../utils/password_generator.dart';
+import '../../../../../utils/passwords_storage.dart';
+import '../../../../../utils/validators.dart';
 
 class SavePassword extends StatefulWidget {
   const SavePassword({

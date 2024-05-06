@@ -5,10 +5,10 @@ import 'package:local_auth/local_auth.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../global/bloc/theme_bloc.dart';
-import '../../utils/passwords_storage.dart';
+import '../../../../global/bloc/theme_bloc.dart';
+import '../../../../utils/passwords_storage.dart';
 import 'settings_master_key.dart';
-import '../../global/bloc/color_bloc.dart';
+import '../../../../global/bloc/color_bloc.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:material_symbols_icons/symbols.dart';
 import 'package:password_manager/global/model.dart';
 
-import '../../components/rounded_appbar.dart';
+import '../../../../components/rounded_appbar.dart';
 
 class CollectionPage extends StatelessWidget {
   const CollectionPage({super.key, required this.data});

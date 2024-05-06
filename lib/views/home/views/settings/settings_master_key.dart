@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/passwords_storage.dart';
-import '../../utils/validators.dart';
+import '../../../../utils/passwords_storage.dart';
+import '../../../../utils/validators.dart';
 
 Future showMasterPasswordBottomSheet(BuildContext context) {
   final formKey = GlobalKey<FormState>();
