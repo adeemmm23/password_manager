@@ -18,8 +18,8 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool isSupported = false;
-  bool isLocked = false;
+  bool _isSupported = false;
+  bool _isLocked = false;
   final LocalAuthentication auth = LocalAuthentication();
 
   @override
@@ -29,13 +29,13 @@ class _SettingsState extends State<Settings> {
     // Check if the device supports biometrics
     auth.isDeviceSupported().then((value) {
       setState(() {
-        isSupported = value;
+        _isSupported = value;
       });
     });
 
     // Check if the user has enabled pin lock
     SharedPreferences.getInstance().then((prefs) {
-      isLocked = prefs.getBool('pinLock') ?? false;
+      _isLocked = prefs.getBool('pinLock') ?? false;
     });
   }
 
@@ -63,10 +63,10 @@ class _SettingsState extends State<Settings> {
               onTap: () {},
             ),
             const SettingsDivider(),
-            if (isSupported)
+            if (_isSupported)
               SettingsListTile(
                 trailing: Switch(
-                  value: isLocked,
+                  value: _isLocked,
                   onChanged: (value) {
                     _getAvailableBiometrics(value);
                   },
@@ -149,7 +149,7 @@ class _SettingsState extends State<Settings> {
 
   Future<void> _getAvailableBiometrics(value) async {
     final prefs = await SharedPreferences.getInstance();
-    isLocked = prefs.getBool('pinLock') ?? false;
+    _isLocked = prefs.getBool('pinLock') ?? false;
     try {
       bool authenticated = await auth.authenticate(
         localizedReason: 'Confim your identity to authenticate',
@@ -161,7 +161,7 @@ class _SettingsState extends State<Settings> {
       if (authenticated) {
         setState(() {
           prefs.setBool('pinLock', value);
-          isLocked = value;
+          _isLocked = value;
         });
       }
     } catch (e) {
@@ -266,7 +266,7 @@ class SettingsColor extends StatefulWidget {
 }
 
 class _SettingsColorState extends State<SettingsColor> {
-  Set<ColorState> selected = {};
+  Set<ColorState> _selected = {};
 
   @override
   Widget build(BuildContext context) {
@@ -275,7 +275,7 @@ class _SettingsColorState extends State<SettingsColor> {
       child: SegmentedButton(
         emptySelectionAllowed: true,
         showSelectedIcon: false,
-        selected: selected,
+        selected: _selected,
         segments: [
           ButtonSegment(
             value: ColorState.red,
@@ -332,7 +332,7 @@ class _SettingsColorState extends State<SettingsColor> {
           if (value.isEmpty) return;
           context.read<ColorCubit>().setColors(value.last);
           setState(() {
-            selected = value;
+            _selected = value;
           });
         },
       ),

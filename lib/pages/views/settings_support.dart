@@ -11,9 +11,8 @@ class SupportPage extends StatefulWidget {
 }
 
 class _SupportPageState extends State<SupportPage> {
-  String? selectedHelp;
-  List<String> historyList = [];
-  List<String> helpList = [
+  final List<String> _historyList = [];
+  final List<String> _helpList = [
     'Creating a new password',
     'Generating a strong password',
     'Saving a password securely',
@@ -46,7 +45,7 @@ class _SupportPageState extends State<SupportPage> {
               barElevation: const MaterialStatePropertyAll(0),
               barHintText: 'Search help',
               suggestionsBuilder: (context, searchController) =>
-                  search(context, searchController),
+                  _search(context, searchController),
             ),
           ),
           const Divider(indent: 20, endIndent: 20, height: 50),
@@ -68,10 +67,10 @@ class _SupportPageState extends State<SupportPage> {
     );
   }
 
-  Iterable<Widget> search(BuildContext context, SearchController controller) {
+  Iterable<Widget> _search(BuildContext context, SearchController controller) {
     if (controller.text.isEmpty) {
-      if (historyList.isNotEmpty) {
-        return getHistoryList(controller);
+      if (_historyList.isNotEmpty) {
+        return _getHistoryList(controller);
       } else {
         return <Widget>[
           Center(
@@ -84,11 +83,11 @@ class _SupportPageState extends State<SupportPage> {
         ];
       }
     }
-    return getSuggestions(controller);
+    return _getSuggestions(controller);
   }
 
-  Iterable<Widget> getHistoryList(SearchController controller) {
-    return historyList.map((e) {
+  Iterable<Widget> _getHistoryList(SearchController controller) {
+    return _historyList.map((e) {
       return ListTile(
         leading: const Icon(
           Symbols.history,
@@ -98,16 +97,16 @@ class _SupportPageState extends State<SupportPage> {
         onTap: () {
           controller.closeView(e);
           controller.text = e;
-          handleSelection(e);
+          _handleSelection(e);
           controller.clear();
         },
       );
     });
   }
 
-  Iterable<Widget> getSuggestions(SearchController controller) {
+  Iterable<Widget> _getSuggestions(SearchController controller) {
     final String input = controller.value.text;
-    return helpList.where((element) {
+    return _helpList.where((element) {
       return element.toLowerCase().contains(input.toLowerCase());
     }).map((e) {
       return ListTile(
@@ -119,23 +118,22 @@ class _SupportPageState extends State<SupportPage> {
         onTap: () {
           controller.closeView(e);
           controller.text = e;
-          handleSelection(e);
+          _handleSelection(e);
           controller.clear();
         },
       );
     });
   }
 
-  void handleSelection(String? value) {
+  void _handleSelection(String? value) {
     setState(() {
-      selectedHelp = value;
-      if (historyList.length >= 5) {
-        historyList.removeLast();
+      if (_historyList.length >= 5) {
+        _historyList.removeLast();
       }
-      if (historyList.contains(value)) {
-        historyList.remove(value);
+      if (_historyList.contains(value)) {
+        _historyList.remove(value);
       }
-      historyList.insert(0, value!);
+      _historyList.insert(0, value!);
     });
   }
 }

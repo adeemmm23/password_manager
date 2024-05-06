@@ -41,19 +41,9 @@ class _SavePasswordState extends State<SavePassword> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              "Generate Password",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.bold,
-                  ),
-            ),
-            const SizedBox(height: 3),
-            Text(
-              "Make sure to tap them correctly!",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleSmall,
+            const ModalTitle(
+              title: "Generate Password",
+              subtitle: "Make sure to tap them correctly!",
             ),
             const SizedBox(height: 15),
             TextFormField(
@@ -149,6 +139,38 @@ class _SavePasswordState extends State<SavePassword> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class ModalTitle extends StatelessWidget {
+  final String title;
+  final String subtitle;
+  const ModalTitle({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          title,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+        const SizedBox(height: 3),
+        Text(
+          subtitle,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleSmall,
+        ),
+      ],
     );
   }
 }
