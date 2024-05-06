@@ -21,6 +21,7 @@ class _PasswordsState extends State<Passwords> {
     super.initState();
   }
 
+  // TODO: Implement a better way to fetch passwords
   Stream fetchStream() async* {
     yield await getPasswords();
     var prev = (await getPasswords()).toString();

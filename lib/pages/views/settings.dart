@@ -68,7 +68,7 @@ class _SettingsState extends State<Settings> {
                 trailing: Switch(
                   value: isLocked,
                   onChanged: (value) {
-                    getAvailableBiometrics(value);
+                    _getAvailableBiometrics(value);
                   },
                 ),
                 leading: const Icon(Symbols.fingerprint, weight: 700),
@@ -147,7 +147,7 @@ class _SettingsState extends State<Settings> {
     ));
   }
 
-  Future<void> getAvailableBiometrics(value) async {
+  Future<void> _getAvailableBiometrics(value) async {
     final prefs = await SharedPreferences.getInstance();
     isLocked = prefs.getBool('pinLock') ?? false;
     try {
@@ -288,13 +288,13 @@ class _SettingsColorState extends State<SettingsColor> {
             ),
           ),
           ButtonSegment(
-            value: ColorState.green,
+            value: ColorState.teal,
             label: Icon(
               Symbols.circle,
               fill: 1,
               color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.green.shade200
-                  : Colors.green.shade400,
+                  ? Colors.teal.shade200
+                  : Colors.teal.shade400,
             ),
           ),
           ButtonSegment(
@@ -318,17 +318,18 @@ class _SettingsColorState extends State<SettingsColor> {
             ),
           ),
           ButtonSegment(
-            value: ColorState.amber,
+            value: ColorState.orange,
             label: Icon(
               Symbols.circle,
               fill: 1,
               color: Theme.of(context).brightness == Brightness.dark
-                  ? Colors.amber.shade200
-                  : Colors.amber.shade400,
+                  ? Colors.orangeAccent.shade200
+                  : Colors.orangeAccent.shade400,
             ),
           ),
         ],
         onSelectionChanged: (value) {
+          if (value.isEmpty) return;
           context.read<ColorCubit>().setColors(value.last);
           setState(() {
             selected = value;

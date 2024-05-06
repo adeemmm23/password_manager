@@ -57,16 +57,14 @@ class _HomeState extends State<Home> {
             label: 'Passwords',
           ),
           FilledButton(
-            onPressed: () async {
-              await showModalBottomSheet(
-                isScrollControlled: true,
-                showDragHandle: true,
-                barrierLabel: "Bottom Sheet",
-                useSafeArea: true,
-                context: context,
-                builder: (context) => PasswordGenerate(),
-              );
-            },
+            onPressed: () async => await showModalBottomSheet(
+              isScrollControlled: true,
+              showDragHandle: true,
+              barrierLabel: "Bottom Sheet",
+              useSafeArea: true,
+              context: context,
+              builder: (context) => const PasswordGenerate(),
+            ),
             child: const Icon(
               Symbols.add_rounded,
               weight: 600,
@@ -82,27 +80,29 @@ class _HomeState extends State<Home> {
           ),
         ],
         selectedIndex: selectedIndex,
-        onDestinationSelected: navigate,
+        onDestinationSelected: _navigate,
         labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
       ),
     );
   }
 
-  void navigate(index) {
-    setState(() {
-      if (index == 2) {
-        pageViewController.animateToPage(
-          1,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOutCubic,
-        );
-      } else {
-        pageViewController.animateToPage(
-          index,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-      }
-    });
+  void _navigate(index) {
+    setState(
+      () {
+        if (index == 2) {
+          pageViewController.animateToPage(
+            1,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOutCubic,
+          );
+        } else {
+          pageViewController.animateToPage(
+            index,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+        }
+      },
+    );
   }
 }

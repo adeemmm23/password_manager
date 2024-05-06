@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:password_manager/pages/authentication.dart';
 import 'package:password_manager/pages/views/passwords_collection.dart';
-import 'package:password_manager/pages/views/settings_colors.dart';
 import 'package:password_manager/pages/views/settings_support.dart';
 import 'pages/home.dart';
 import 'pages/biometric.dart';
@@ -12,6 +12,7 @@ class AppRouter {
   late final router = GoRouter(
     debugLogDiagnostics: true,
     initialLocation: initialLocation(isLocked),
+    // initialLocation: '/athentication',
     routes: [
       GoRoute(
         path: '/',
@@ -42,10 +43,10 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/colors',
+        path: '/athentication',
         pageBuilder: (context, state) => const MaterialPage(
-          name: 'colors',
-          child: SettingsColors(),
+          name: 'athentication',
+          child: Authentication(),
         ),
       ),
     ],

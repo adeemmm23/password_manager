@@ -2,22 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ColorCubit extends Cubit<MaterialColor> {
+class ColorCubit extends Cubit<Color> {
   final int init;
   ColorCubit(this.init) : super(_getColorFromIndex(init));
 
-  static MaterialColor _getColorFromIndex(int index) {
+  static Color _getColorFromIndex(int index) {
     switch (index) {
       case 0:
         return Colors.red;
       case 1:
-        return Colors.green;
+        return Colors.teal;
       case 2:
         return Colors.blue;
       case 3:
-        return Colors.purple;
+        return Colors.purpleAccent;
       case 4:
-        return Colors.yellow;
+        return Colors.orangeAccent;
       default:
         return Colors.red;
     }
@@ -30,8 +30,8 @@ class ColorCubit extends Cubit<MaterialColor> {
         emit(Colors.red);
         prefs.setInt('color', 0);
         break;
-      case ColorState.green:
-        emit(Colors.green);
+      case ColorState.teal:
+        emit(Colors.teal);
         prefs.setInt('color', 1);
         break;
       case ColorState.blue:
@@ -39,15 +39,15 @@ class ColorCubit extends Cubit<MaterialColor> {
         prefs.setInt('color', 2);
         break;
       case ColorState.purple:
-        emit(Colors.purple);
+        emit(Colors.purpleAccent);
         prefs.setInt('color', 3);
         break;
-      case ColorState.amber:
-        emit(Colors.amber);
+      case ColorState.orange:
+        emit(Colors.orangeAccent);
         prefs.setInt('color', 4);
         break;
     }
   }
 }
 
-enum ColorState { red, green, blue, purple, amber }
+enum ColorState { red, teal, blue, purple, orange }

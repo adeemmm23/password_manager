@@ -8,6 +8,7 @@ import 'global/bloc/theme_bloc.dart';
 import 'router.dart';
 
 void main() async {
+  // Ensure that Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
   final prefs = await SharedPreferences.getInstance();
@@ -21,7 +22,6 @@ void main() async {
   final color = prefs.getInt('color') ?? 0;
   final colorCubit = ColorCubit(color);
 
-  // empty preferences
   // prefs.remove('passwords');
   // prefs.remove('pinLock');
   // prefs.remove('theme');
@@ -53,12 +53,18 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const pageTransition = PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    );
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: themeCubit),
         BlocProvider.value(value: colorCubit),
       ],
-      child: BlocBuilder<ColorCubit, MaterialColor>(
+      child: BlocBuilder<ColorCubit, Color>(
         builder: (context, color) {
           return BlocBuilder<ThemeCubit, ThemeMode>(
               builder: (context, themeMode) {
@@ -67,23 +73,13 @@ class MainApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               themeAnimationCurve: Curves.easeInOut,
               theme: ThemeData(
-                  pageTransitionsTheme: const PageTransitionsTheme(
-                    builders: {
-                      TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                      TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                    },
-                  ),
+                  pageTransitionsTheme: pageTransition,
                   colorScheme: ColorScheme.fromSeed(
                     brightness: Brightness.light,
                     seedColor: color,
                   )),
               darkTheme: ThemeData(
-                pageTransitionsTheme: const PageTransitionsTheme(
-                  builders: {
-                    TargetPlatform.android: CupertinoPageTransitionsBuilder(),
-                    TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
-                  },
-                ),
+                pageTransitionsTheme: pageTransition,
                 colorScheme: ColorScheme.fromSeed(
                   brightness: Brightness.dark,
                   seedColor: color,
