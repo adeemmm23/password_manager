@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'passwords_generate_views/bloc/page_bloc.dart';
 import 'passwords_generate_views/bloc/controller_bloc.dart';
 import 'passwords_generate_views/select_password.dart';
