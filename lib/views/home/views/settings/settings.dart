@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../global/bloc/theme_bloc.dart';
 import '../../../../utils/passwords_storage.dart';
@@ -18,27 +16,6 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  bool _isSupported = false;
-  bool _isLocked = false;
-  final LocalAuthentication auth = LocalAuthentication();
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Check if the device supports biometrics
-    auth.isDeviceSupported().then((value) {
-      setState(() {
-        _isSupported = value;
-      });
-    });
-
-    // Check if the user has enabled pin lock
-    SharedPreferences.getInstance().then((prefs) {
-      _isLocked = prefs.getBool('pinLock') ?? false;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,18 +39,6 @@ class _SettingsState extends State<Settings> {
               title: 'Change Master Key',
               onTap: () {},
             ),
-            const SettingsDivider(),
-            if (_isSupported)
-              SettingsListTile(
-                trailing: Switch(
-                  value: _isLocked,
-                  onChanged: (value) {
-                    _getAvailableBiometrics(value);
-                  },
-                ),
-                leading: const Icon(Symbols.fingerprint, weight: 700),
-                title: 'Pin Lock',
-              ),
             const SettingsDivider(),
             SettingsListTile(
               trailing: const Icon(Symbols.arrow_forward, weight: 700),
@@ -145,28 +110,6 @@ class _SettingsState extends State<Settings> {
         const SettingsVerion(),
       ],
     ));
-  }
-
-  Future<void> _getAvailableBiometrics(value) async {
-    final prefs = await SharedPreferences.getInstance();
-    _isLocked = prefs.getBool('pinLock') ?? false;
-    try {
-      bool authenticated = await auth.authenticate(
-        localizedReason: 'Confim your identity to authenticate',
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: false,
-        ),
-      );
-      if (authenticated) {
-        setState(() {
-          prefs.setBool('pinLock', value);
-          _isLocked = value;
-        });
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
   }
 }
 

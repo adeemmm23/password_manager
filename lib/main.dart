@@ -15,9 +15,6 @@ void main() async {
   await dotenv.load(fileName: ".env");
   final prefs = await SharedPreferences.getInstance();
 
-  final isLocked = prefs.getBool('pinLock') ?? false;
-  final appRouter = AppRouter(isLocked);
-
   final theme = prefs.getInt('theme') ?? 0;
   final themeCubit = ThemeCubit(theme);
 
@@ -35,7 +32,6 @@ void main() async {
   ));
 
   runApp(MainApp(
-    appRouter: appRouter,
     themeCubit: themeCubit,
     colorCubit: colorCubit,
   ));
@@ -44,12 +40,10 @@ void main() async {
 class MainApp extends StatelessWidget {
   const MainApp({
     super.key,
-    required this.appRouter,
     required this.themeCubit,
     required this.colorCubit,
   });
 
-  final AppRouter appRouter;
   final ThemeCubit themeCubit;
   final ColorCubit colorCubit;
 
@@ -61,6 +55,7 @@ class MainApp extends StatelessWidget {
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     );
+    final appRouter = AppRouter();
     final passwordsCubit = PasswordsCubit();
 
     return MultiBlocProvider(
