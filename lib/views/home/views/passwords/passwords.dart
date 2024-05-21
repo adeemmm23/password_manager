@@ -49,34 +49,31 @@ class _PasswordsState extends State<Passwords> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SubjectCubit, int>(
-      listener: (context, state) {},
-      child: StreamBuilder(
-        initialData: const [],
-        stream: fetchStream(),
-        builder: (context, snapshot) {
-          debugPrint('Passwords page rebuilt');
-          if (snapshot.hasError) {
-            return const Center(child: Text("An Error Occurred!"));
-          }
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No Passwords Are Saved!"));
-          }
+    return StreamBuilder(
+      initialData: const [],
+      stream: fetchStream(),
+      builder: (context, snapshot) {
+        debugPrint('Passwords page rebuilt');
+        if (snapshot.hasError) {
+          return const Center(child: Text("An Error Occurred!"));
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text("No Passwords Are Saved!"));
+        }
 
-          final passwords = snapshot.data as List;
-          return ListView(
-            padding: const EdgeInsets.only(
-              right: 10,
-              left: 10,
-            ),
-            children: [
-              const PasswordsTitle(),
-              for (var password in passwords) PasswordsCard(password: password),
-              const SizedBox(height: 4),
-            ],
-          );
-        },
-      ),
+        final passwords = snapshot.data as List;
+        return ListView(
+          padding: const EdgeInsets.only(
+            right: 10,
+            left: 10,
+          ),
+          children: [
+            const PasswordsTitle(),
+            for (var password in passwords) PasswordsCard(password: password),
+            const SizedBox(height: 4),
+          ],
+        );
+      },
     );
   }
 }
