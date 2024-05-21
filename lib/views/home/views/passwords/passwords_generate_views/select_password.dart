@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:password_manager/views/home/views/passwords/bloc/passwords_bloc.dart';
 
 import 'bloc/controller_bloc.dart';
 import '../../../../../utils/password_generator.dart';
@@ -129,6 +130,13 @@ class _SavePasswordState extends State<SavePassword> {
                   website: context.read<ControllerCubit>().state,
                   username: usernameController.text.trim(),
                   password: passwordController.text.trim(),
+                );
+                context.read<PasswordsCubit>().build();
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Password added successfully'),
+                    duration: Duration(seconds: 2),
+                  ),
                 );
                 Navigator.pop(context);
               },

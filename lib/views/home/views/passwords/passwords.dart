@@ -5,7 +5,7 @@ import 'package:material_symbols_icons/symbols.dart';
 
 import 'package:password_manager/utils/passwords_storage.dart';
 import 'package:password_manager/global/model.dart';
-import 'package:password_manager/views/home/views/passwords/bloc/subject_bloc.dart';
+import 'package:password_manager/views/home/views/passwords/bloc/passwords_bloc.dart';
 
 class Passwords extends StatefulWidget {
   const Passwords({
@@ -24,55 +24,36 @@ class _PasswordsState extends State<Passwords> {
   }
 
   // TODO: Implement a better way to fetch passwords
-  Stream fetchStream() async* {
-    yield await getPasswords();
-    var prev = (await getPasswords()).toString();
-    while (true) {
-      await Future.delayed(const Duration(seconds: 1));
-      // debugPrint('Checking for password changes');
-      var current = (await getPasswords()).map((e) => e.toMap()).toString();
-      if (current != prev) {
-        debugPrint('Passwords changed');
-        yield await getPasswords();
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Password added successfully'),
-              duration: Duration(seconds: 2),
-            ),
-          );
-        }
-        prev = current;
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-      initialData: const [],
-      stream: fetchStream(),
-      builder: (context, snapshot) {
-        debugPrint('Passwords page rebuilt');
-        if (snapshot.hasError) {
-          return const Center(child: Text("An Error Occurred!"));
-        }
-        if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text("No Passwords Are Saved!"));
-        }
-
-        final passwords = snapshot.data as List;
-        return ListView(
-          padding: const EdgeInsets.only(
-            right: 10,
-            left: 10,
-          ),
-          children: [
-            const PasswordsTitle(),
-            for (var password in passwords) PasswordsCard(password: password),
-            const SizedBox(height: 4),
-          ],
-        );
+    return BlocBuilder<PasswordsCubit, void>(
+      builder: (context, state) {
+        return FutureBuilder(
+            future: getPasswords(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+              final passwords = snapshot.data as List<Collection>;
+              return ListView(
+                padding: const EdgeInsets.only(
+                  right: 10,
+                  left: 10,
+                ),
+                children: [
+                  const PasswordsTitle(),
+                  for (var password in passwords)
+                    PasswordsCard(password: password),
+                  const SizedBox(height: 4),
+                ],
+              );
+            });
       },
     );
   }

@@ -7,6 +7,7 @@ import 'global/bloc/color_bloc.dart';
 import 'global/constants.dart';
 import 'global/bloc/theme_bloc.dart';
 import 'router.dart';
+import 'views/home/views/passwords/bloc/passwords_bloc.dart';
 
 void main() async {
   // Ensure that Flutter is initialized
@@ -60,8 +61,11 @@ class MainApp extends StatelessWidget {
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     );
+    final passwordsCubit = PasswordsCubit();
+
     return MultiBlocProvider(
       providers: [
+        BlocProvider.value(value: passwordsCubit),
         BlocProvider.value(value: themeCubit),
         BlocProvider.value(value: colorCubit),
       ],
