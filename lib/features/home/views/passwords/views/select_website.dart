@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:password_manager/utils/passwords_storage.dart';
 
-import 'bloc/page_bloc.dart';
-import 'bloc/controller_bloc.dart';
+import 'state/page_bloc.dart';
+import 'state/controller_bloc.dart';
 
 class SelectWebsite extends StatefulWidget {
   const SelectWebsite({

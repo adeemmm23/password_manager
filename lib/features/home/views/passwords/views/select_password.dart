@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:material_symbols_icons/symbols.dart';
-import 'package:password_manager/views/home/views/passwords/bloc/passwords_bloc.dart';
+import 'package:password_manager/features/home/views/passwords/state/passwords_bloc.dart';
 
-import 'bloc/controller_bloc.dart';
+import 'state/controller_bloc.dart';
 import '../../../../../utils/password_generator.dart';
 import '../../../../../utils/passwords_storage.dart';
 import '../../../../../utils/validators.dart';

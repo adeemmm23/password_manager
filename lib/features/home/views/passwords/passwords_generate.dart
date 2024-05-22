@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'passwords_generate_views/bloc/page_bloc.dart';
-import 'passwords_generate_views/bloc/controller_bloc.dart';
-import 'passwords_generate_views/select_password.dart';
-import 'passwords_generate_views/select_website.dart';
+import 'views/state/page_bloc.dart';
+import 'views/state/controller_bloc.dart';
+import 'views/select_password.dart';
+import 'views/select_website.dart';
 import '../../../../components/expandable_pageview.dart';
 
 class PasswordGenerate extends StatelessWidget {
