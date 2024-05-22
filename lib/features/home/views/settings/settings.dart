@@ -32,7 +32,7 @@ class _SettingsState extends State<Settings> {
           children: [
             SettingsListTile(
               trailing: const Icon(
-                Symbols.arrow_forward,
+                Symbols.arrow_forward_rounded,
                 weight: 700,
               ),
               leading: const Icon(Symbols.key_rounded, weight: 700),
@@ -41,7 +41,7 @@ class _SettingsState extends State<Settings> {
             ),
             const SettingsDivider(),
             SettingsListTile(
-              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              trailing: const Icon(Symbols.arrow_forward_rounded, weight: 700),
               leading: const Icon(Symbols.upload_rounded, weight: 700),
               title: 'Import Data',
               onTap: () {
@@ -50,10 +50,17 @@ class _SettingsState extends State<Settings> {
             ),
             const SettingsDivider(),
             SettingsListTile(
-              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              trailing: const Icon(Symbols.arrow_forward_rounded, weight: 700),
               leading: const Icon(Symbols.download_rounded, weight: 700),
               title: 'Export Data',
               onTap: () => exportPasswords(context),
+            ),
+            const SettingsDivider(),
+            SettingsListTile(
+              trailing: const Icon(Symbols.arrow_forward_rounded, weight: 700),
+              leading: const Icon(Symbols.lock_rounded, weight: 700),
+              title: 'Lock',
+              onTap: () => context.go('/authentication'),
             ),
           ],
         ),
@@ -87,7 +94,7 @@ class _SettingsState extends State<Settings> {
         SettingsCard(
           children: [
             SettingsListTile(
-              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              trailing: const Icon(Symbols.arrow_forward_rounded, weight: 700),
               leading: const Icon(Symbols.privacy_tip_rounded, weight: 700),
               title: 'Privacy Policy',
               onTap: () {
@@ -98,7 +105,7 @@ class _SettingsState extends State<Settings> {
             ),
             const SettingsDivider(),
             SettingsListTile(
-              trailing: const Icon(Symbols.arrow_forward, weight: 700),
+              trailing: const Icon(Symbols.arrow_forward_rounded, weight: 700),
               leading: const Icon(Symbols.support, weight: 700),
               title: 'Support',
               onTap: () {

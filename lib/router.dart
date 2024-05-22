@@ -41,9 +41,9 @@ class AppRouter {
         ),
       ),
       GoRoute(
-        path: '/athentication',
+        path: '/authentication',
         pageBuilder: (context, state) => const MaterialPage(
-          name: 'athentication',
+          name: 'authentication',
           child: Authentication(),
         ),
       ),
@@ -54,7 +54,7 @@ class AppRouter {
   // initial location
   String initialLocation(bool isLocked) {
     if (isLocked) {
-      return '/athentication';
+      return '/authentication';
     } else {
       return '/';
     }
