@@ -13,6 +13,8 @@ void main() async {
   // Ensure that Flutter is initialized
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+  final appRouter = AppRouter();
+  final passwordsCubit = PasswordsCubit();
   final prefs = await SharedPreferences.getInstance();
 
   final theme = prefs.getInt('theme') ?? 0;
@@ -32,20 +34,26 @@ void main() async {
   ));
 
   runApp(MainApp(
-    themeCubit: themeCubit,
-    colorCubit: colorCubit,
+    appRouter,
+    themeCubit,
+    colorCubit,
+    passwordsCubit,
   ));
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({
+  const MainApp(
+    this.appRouter,
+    this.themeCubit,
+    this.colorCubit,
+    this.passwordsCubit, {
     super.key,
-    required this.themeCubit,
-    required this.colorCubit,
   });
 
   final ThemeCubit themeCubit;
   final ColorCubit colorCubit;
+  final AppRouter appRouter;
+  final PasswordsCubit passwordsCubit;
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +63,12 @@ class MainApp extends StatelessWidget {
         TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
       },
     );
-    final appRouter = AppRouter();
-    final passwordsCubit = PasswordsCubit();
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: passwordsCubit),
         BlocProvider.value(value: themeCubit),
         BlocProvider.value(value: colorCubit),
+        BlocProvider.value(value: passwordsCubit),
       ],
       child: BlocBuilder<ColorCubit, Color>(
         builder: (context, color) {
