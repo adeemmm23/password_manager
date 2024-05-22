@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'views/authentication/authentication.dart';
-import 'views/home/views/passwords/passwords_collection.dart';
-import 'views/home/views/settings/settings_support.dart';
-import 'views/authentication/biometric.dart';
-import 'views/home/home.dart';
+import 'features/authentication/authentication.dart';
+import 'features/home/views/passwords/passwords_collection.dart';
+import 'features/home/views/settings/settings_support.dart';
+import 'features/authentication/biometric.dart';
+import 'features/home/home.dart';
 
 class AppRouter {
   late final router = GoRouter(

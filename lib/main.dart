@@ -3,11 +3,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'global/bloc/color_bloc.dart';
+import 'global/state/color_bloc.dart';
 import 'global/constants.dart';
-import 'global/bloc/theme_bloc.dart';
+import 'global/state/theme_bloc.dart';
 import 'router.dart';
-import 'views/home/views/passwords/bloc/passwords_bloc.dart';
+import 'features/home/views/passwords/state/passwords_bloc.dart';
 
 void main() async {
   // Ensure that Flutter is initialized
