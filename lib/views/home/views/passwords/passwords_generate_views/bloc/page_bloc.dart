@@ -1,8 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class PageCubit extends Cubit<double?> {
-  PageCubit() : super(null);
+class PageCubit extends Cubit<PageState> {
+  PageCubit() : super(PageState.current);
 
-  void previousPage() => emit(0);
-  void nextPage() => emit(1);
+  void previousPage() => emit(PageState.previous);
+  void nextPage() => emit(PageState.next);
+  void currentPage() => emit(PageState.current);
 }
+
+enum PageState { current, previous, next }

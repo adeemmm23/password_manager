@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:material_symbols_icons/symbols.dart';
 
 class Authentication extends StatefulWidget {
   const Authentication({super.key});
@@ -8,18 +9,6 @@ class Authentication extends StatefulWidget {
 }
 
 class _AuthenticationState extends State<Authentication> {
-  double turn = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        turn = 10;
-      });
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,37 +24,8 @@ class _AuthenticationState extends State<Authentication> {
         body: Center(
           child: Stack(
             alignment: Alignment.center,
+            clipBehavior: Clip.none,
             children: [
-              AnimatedRotation(
-                turns: turn,
-                duration: const Duration(seconds: 10),
-                curve: Curves.easeInOut,
-                child: Image.asset(
-                  'assets/images/circle.png',
-                  height: 300,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              AnimatedRotation(
-                turns: -turn / 2,
-                duration: const Duration(seconds: 10),
-                curve: Curves.easeInOut,
-                child: Image.asset(
-                  'assets/images/circle.png',
-                  height: 200,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              AnimatedRotation(
-                turns: turn / 4,
-                duration: const Duration(seconds: 10),
-                curve: Curves.easeInOut,
-                child: Image.asset(
-                  'assets/images/circle.png',
-                  height: 150,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
               SizedBox(
                 width: 300,
                 child: TextField(
@@ -80,18 +40,20 @@ class _AuthenticationState extends State<Authentication> {
                     ),
                   ),
                   onChanged: (value) {
-                    turn++;
+                    setState(() {});
                   },
                 ),
               )
             ],
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () {},
           label: const Text('Unlock'),
-          icon: const Icon(Icons.fingerprint),
+          icon: const Icon(
+            Symbols.chevron_right_rounded,
+            weight: 600,
+          ),
         ));
   }
 }

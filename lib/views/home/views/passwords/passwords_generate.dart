@@ -21,15 +21,16 @@ class PasswordGenerate extends StatelessWidget {
         BlocProvider.value(value: controllerCubit),
         BlocProvider.value(value: pageCubit),
       ],
-      child: BlocBuilder<PageCubit, double?>(
-        // TODO: Find a better way to handle this state
+      child: BlocBuilder<PageCubit, PageState>(
+        buildWhen: (previous, current) => pageController.hasClients,
         builder: (context, state) {
-          if (state != null && state != pageController.page) {
+          if (state != PageState.current) {
             pageController.animateToPage(
-              state.toInt(),
+              state == PageState.next ? 1 : 0,
               duration: const Duration(milliseconds: 300),
               curve: Curves.easeInOut,
             );
+            context.read<PageCubit>().currentPage();
           }
           return Padding(
             padding: EdgeInsets.only(

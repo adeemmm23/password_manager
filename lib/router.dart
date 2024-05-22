@@ -10,7 +10,7 @@ import 'views/home/home.dart';
 class AppRouter {
   late final router = GoRouter(
     debugLogDiagnostics: true,
-    initialLocation: initialLocation(true),
+    initialLocation: initialLocation(false),
     // initialLocation: '/athentication',
     routes: [
       GoRoute(
