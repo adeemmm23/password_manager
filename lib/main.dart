@@ -79,17 +79,14 @@ class MainApp extends StatelessWidget {
               debugShowCheckedModeBanner: false,
               themeAnimationCurve: Curves.easeInOut,
               theme: ThemeData(
-                  pageTransitionsTheme: pageTransition,
-                  colorScheme: ColorScheme.fromSeed(
-                    brightness: Brightness.light,
-                    seedColor: color,
-                  )),
-              darkTheme: ThemeData(
+                brightness: Brightness.light,
                 pageTransitionsTheme: pageTransition,
-                colorScheme: ColorScheme.fromSeed(
-                  brightness: Brightness.dark,
-                  seedColor: color,
-                ),
+                colorSchemeSeed: color,
+              ),
+              darkTheme: ThemeData(
+                brightness: Brightness.dark,
+                pageTransitionsTheme: pageTransition,
+                colorSchemeSeed: color,
               ),
               themeMode: themeMode,
               routeInformationParser: appRouter.router.routeInformationParser,

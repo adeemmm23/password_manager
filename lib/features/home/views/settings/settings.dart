@@ -53,7 +53,15 @@ class _SettingsState extends State<Settings> {
               trailing: const Icon(Symbols.arrow_forward_rounded, weight: 700),
               leading: const Icon(Symbols.download_rounded, weight: 700),
               title: 'Export Data',
-              onTap: () => exportPasswords(context),
+              onTap: () async {
+                await exportPasswords(context);
+                // TODO: Jareb choof hethi, twali t7othhom mooch fil function
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                    content: Text('Passwords exported successfully!'),
+                  ));
+                }
+              },
             ),
             const SettingsDivider(),
             SettingsListTile(
