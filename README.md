@@ -5,10 +5,10 @@ A secure, modern password manager built with Flutter that helps you store, gener
 ## 📱 Preview
 
 <div align="center">
-  <img src=".github/1.png" width="200" alt="Authentication Screen" />
-  <img src=".github/2.png" width="200" alt="Home Screen" />
-  <img src=".github/3.png" width="200" alt="Password Generator" />
-  <img src=".github/4.png" width="200" alt="Settings Screen" />
+  <img src=".github/1.png" width="400" alt="Authentication Screen" />
+  <img src=".github/2.png" width="400" alt="Home Screen" />
+  <img src=".github/3.png" width="400" alt="Password Generator" />
+  <img src=".github/4.png" width="400" alt="Settings Screen" />
 </div>
 
 ## ✨ Features
@@ -19,16 +19,6 @@ A secure, modern password manager built with Flutter that helps you store, gener
 - **Biometric Authentication**: Fingerprint and face unlock support
 - **Master Key Protection**: Single master password to access all your data
 - **Local Storage**: All data stored locally on your device - no cloud dependency
-
-### 🎯 **Core Functionality**
-
-- **Password Storage**: Securely store passwords for websites and applications
-- **Password Generator**: Generate strong, customizable passwords with:
-  - Configurable length (6-20 characters)
-  - Numbers, uppercase letters, and special characters
-  - Real-time password strength indicator
-- **Organized Collections**: Group passwords by website/application
-- **Quick Access**: Fast search and retrieval of stored credentials
 
 ### 🎨 **User Experience**
 
@@ -121,86 +111,6 @@ lib/
 - **Encrypted Storage**: All sensitive data encrypted at rest
 - **Secure Preferences**: Using Flutter's secure storage mechanisms
 
-## 🛠️ Dependencies
-
-### Core Dependencies
-
-- **flutter_bloc**: State management
-- **go_router**: Navigation and routing
-- **encrypt**: AES encryption implementation
-- **local_auth**: Biometric authentication
-- **shared_preferences**: Local data persistence
-
-### UI Dependencies
-
-- **material_symbols_icons**: Modern icon set
-- **flutter_native_splash**: Custom splash screen
-- **flutter_launcher_icons**: App icon configuration
-
-### Utility Dependencies
-
-- **file_picker**: Import/export functionality
-- **url_launcher**: External link handling
-- **crypto**: Cryptographic operations
-- **flutter_dotenv**: Environment variable management
-
-## 📋 Usage
-
-### Adding a New Password
-
-1. Tap the **+** button on the passwords screen
-2. Select or enter a website/application name
-3. Enter your username/email
-4. Generate a secure password or enter your own
-5. Save to securely store the credentials
-
-### Generating Passwords
-
-- Use the built-in generator for strong passwords
-- Customize length and character types
-- Real-time strength indicator
-- One-tap copy to clipboard
-
-### Managing Collections
-
-- Passwords are automatically grouped by website
-- Tap any collection to view all accounts
-- Long-press to copy passwords quickly
-- Organized view with account counts
-
-### Security Features
-
-- Enable biometric unlock in settings
-- Regular auto-lock when app is backgrounded
-- Export/import for backup purposes
-- Master key change functionality
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- Flutter team for the amazing framework
-- Material Design team for the design system
-- Open source community for the excellent packages
-
-## 📞 Support
-
-If you encounter any issues or have questions:
-
-- Create an issue on GitHub
-- Check the documentation
-- Review the FAQ section
-
 ---
 
-**⚠️ Security Notice**: This app stores sensitive data. Always use a strong master password and enable biometric authentication when available. Regular backups are recommended.
+**⚠️ DO NOT USE YET**: This app is still in development and isn't for production yet.
